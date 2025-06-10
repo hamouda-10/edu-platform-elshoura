@@ -1,0 +1,3077 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة مستر أحمد الشورى التعليمية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+     <head>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <style>
+        /* General Styles */
+        :root {
+            --primary-color: #0056b3; /* Darker Blue */
+            --secondary-color: #28a745; /* Green */
+            --accent-color: #ffc107; /* Yellow */
+            --dark-text: #2c3e50; /* Darker text for readability */
+            --light-text: #ecf0f1;
+            --bg-light: #f4f7f6;
+            --bg-dark: #34495e;
+            --card-bg: #ffffff;
+            --border-color: #dfe6e9;
+            --shadow: rgba(0, 0, 0, 0.15);
+            --hover-shadow: rgba(0, 0, 0, 0.25);
+
+
+                        --gold: #FFD700;
+            --gold-light: rgba(255, 215, 0, 0.7);
+            --blue-dark: #001F3F;
+            --blue-medium: #0668bd;
+            --blue-light: #7FDBFF;
+            --blue-transparent: rgba(127, 219, 255, 0.3);
+            --text-light: rgba(255,255,255,0.9);
+            --text-lighter: rgba(255,255,255,0.7);
+            --github-color: #333;
+            --whatsapp-color: #00e013df;
+            --facebook-color: #1877F2;
+            --instagram-color: #E4405F;
+            --linkedin-color: #0A66C2;
+
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            direction: rtl;
+            text-align: right;
+            background-color: var(--bg-light);
+            color: var(--dark-text);
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            line-height: 1.6;
+            background-image: url('https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); /* Unsplash image: open book, light and knowledge */
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: color 0.3s ease;
+        }
+
+       
+
+        /* Background Animation */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            background: linear-gradient(135deg, #e0f2f750 0%, #cce7f550 100%); /* Lighter overlay for background image */
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            animation: moveCircles 15s infinite ease-in-out alternate;
+            opacity: 0.6;
+            filter: blur(2px);
+        }
+
+        .circle-1 { width: 150px; height: 150px; top: 10%; left: 5%; animation-delay: 0s; }
+        .circle-2 { width: 200px; height: 200px; top: 50%; right: 15%; animation-delay: 3s; }
+        .circle-3 { width: 100px; height: 100px; bottom: 20%; left: 25%; animation-delay: 6s; }
+        .circle-4 { width: 180px; height: 180px; top: 30%; left: 70%; animation-delay: 9s; }
+        .circle-5 { width: 120px; height: 120px; bottom: 5%; right: 40%; animation-delay: 12s; }
+
+        @keyframes moveCircles {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(50px, 80px) scale(1.1); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+
+        /* Utility Classes */
+        .container {
+            display: none; /* Hidden by default */
+            min-height: 100vh;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 20px;
+            padding-top: 20px; /* Add some top padding */
+        }
+
+        .container.active {
+            display: flex;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            font-family: 'Cairo', sans-serif;
+            margin: 5px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn.primary-btn {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            box-shadow: 0 4px 10px rgba(0, 86, 179, 0.2);
+        }
+
+        .btn.primary-btn:hover {
+            background-color: #003d80;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 86, 179, 0.3);
+        }
+
+        .btn.secondary-btn {
+            background-color: var(--secondary-color);
+            color: var(--light-text);
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2);
+        }
+
+        .btn.secondary-btn:hover {
+            background-color: #1e7e34;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn.outline-btn {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn.outline-btn:hover {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            transform: translateY(-3px);
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--dark-text);
+            font-size: 1.1em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s ease, transform 0.3s ease;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .back-btn:hover {
+            color: var(--primary-color);
+            transform: translateX(-5px);
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            background-color: var(--card-bg);
+            padding: 15px 30px;
+            box-shadow: 0 2px 15px var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 15px;
+            max-width: 1500px; /* Constrain header width */
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .header .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header .logo img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid var(--primary-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 86, 179, 0.3);
+        }
+
+        .header .logo img:hover {
+            transform: rotate(15deg) scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 86, 179, 0.5);
+        }
+
+        .header .logo h1 {
+            font-size: 1.9em;
+            color: var(--dark-text);
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .header .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .header .main-nav a {
+            font-size: 1.15em;
+            color: var(--dark-text);
+            padding: 10px 18px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .header .main-nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            background-color: var(--primary-color);
+            bottom: -5px;
+            right: 0;
+            transition: width 0.3s ease;
+        }
+
+        .header .main-nav a:hover {
+            color: var(--primary-color);
+            background-color: rgba(0, 86, 179, 0.05);
+        }
+
+        .header .main-nav a:hover::after {
+            width: 100%;
+            left: 0;
+            right: auto;
+        }
+
+
+        /* Hero Section (Landing Page) */
+        .hero {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+            padding: 80px 30px;
+            max-width: 1300px;
+            width: 100%;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px var(--shadow);
+            margin-top: 20px; /* Adjusted margin-top */
+            border: 1px solid var(--border-color);
+        }
+
+        .hero-content {
+            flex: 1;
+            min-width: 320px;
+            animation: fadeInRight 1.2s ease-out;
+        }
+
+        .hero-content h2 {
+            font-size: 3.5em;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            line-height: 1.2;
+            font-weight: 800;
+        }
+
+        .hero-content p {
+            font-size: 1.5em;
+            color: var(--dark-text);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        .hero-image {
+            flex: 1;
+            min-width: 320px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeInLeft 1.2s ease-out;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px var(--shadow);
+            transition: transform 0.5s ease;
+        }
+        .hero-image img:hover {
+            transform: scale(1.03);
+        }
+
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(70px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-70px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* About Section */
+        .about-section {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px var(--shadow);
+            padding: 60px 40px;
+            max-width: 1300px;
+            width: 100%;
+            margin-top: 20px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .about-section h2 {
+            font-size: 3em;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-weight: 800;
+            position: relative;
+            display: inline-block;
+        }
+        .about-section h2::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 4px;
+            background-color: var(--secondary-color);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .about-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-top: 40px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .about-text, .about-teacher-info, .about-features {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            border-radius: 15px;
+            background-color: var(--bg-light);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 1px solid var(--border-color);
+        }
+
+        .about-text p, .about-teacher-info p, .about-features ul {
+            font-size: 1.1em;
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .about-teacher-info img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 6px solid var(--accent-color);
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(255, 193, 7, 0.6);
+            transition: transform 0.4s ease;
+        }
+        .about-teacher-info img:hover {
+            transform: scale(1.05);
+        }
+
+        .about-teacher-info h3 {
+            font-size: 1.8em;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .about-teacher-info .social-links {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .about-teacher-info .social-links a {
+            color: var(--primary-color);
+            font-size: 1.8em;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .about-teacher-info .social-links a:hover {
+            color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+        
+        .about-features h3 {
+            font-size: 1.6em;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .about-features ul {
+            list-style: none;
+            padding: 0;
+        }
+        .about-features ul li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.05em;
+            color: #444;
+        }
+        .about-features ul li i {
+            color: var(--secondary-color);
+            font-size: 1.2em;
+        }
+
+        /* Developer Footer */
+        .developer-footer {
+            width: 100%;
+            max-width: 1500px;
+            background-color: var(--bg-dark);
+            color: var(--light-text);
+            padding: 20px 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 40px;
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        .developer-footer p {
+            margin: 0;
+            font-size: 1em;
+            color: rgba(255,255,255,0.9);
+        }
+        .developer-footer .social-links {
+            display: flex;
+            gap: 20px;
+        }
+        .developer-footer .social-links a {
+            color: var(--light-text);
+            font-size: 1.5em;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .developer-footer .social-links a:hover {
+            color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        /* Auth Screen */
+        .auth-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 100px);
+            width: 100%;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background-color: var(--card-bg);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px var(--shadow);
+            width: 100%;
+            max-width: 550px;
+            text-align: center;
+            animation: fadeIn 0.9s ease-out;
+            border: 1px solid var(--border-color);
+        }
+
+        .auth-card h2 {
+            font-size: 2.5em;
+            color: var(--primary-color);
+            margin-bottom: 35px;
+            font-weight: 700;
+        }
+
+        .auth-options {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 35px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .auth-option-btn {
+            background-color: var(--bg-light);
+            color: var(--dark-text);
+            border: 2px solid var(--border-color);
+            padding: 12px 30px;
+            font-size: 1.15em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .auth-option-btn.active,
+        .auth-option-btn:hover {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            border-color: var(--primary-color);
+            box-shadow: 0 5px 15px rgba(0, 86, 179, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .auth-form {
+            display: none;
+            flex-direction: column;
+            gap: 25px;
+            animation: fadeIn 0.7s ease-out;
+        }
+
+        .auth-form.active {
+            display: flex;
+        }
+
+        .form-group {
+            text-align: right;
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: var(--dark-text);
+            font-size: 1.05em;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-family: 'Cairo', sans-serif;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background-color: var(--bg-light);
+            color: var(--dark-text);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 86, 179, 0.15);
+            background-color: var(--card-bg);
+        }
+
+        .form-message {
+            margin-top: 25px;
+            font-size: 1.05em;
+            font-weight: 600;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        .form-message.show {
+            display: block;
+        }
+        .form-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+
+        /* Dashboard Layout (Teacher & Student) */
+        .dashboard-content, .student-content {
+            display: flex;
+            width: 100%;
+            max-width: 1500px;
+            margin-top: 20px; /* Adjusted margin-top */
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px var(--shadow);
+            overflow: hidden;
+            min-height: calc(100vh - 150px);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar {
+            width: 300px;
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: inset -7px 0 15px rgba(0, 0, 0, 0.15);
+            flex-shrink: 0;
+        }
+
+        .profile-info {
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .profile-avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 5px solid var(--accent-color);
+            object-fit: cover;
+            margin-bottom: 18px;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            box-shadow: 0 0 15px rgba(255, 193, 7, 0.5);
+        }
+        .profile-avatar:hover {
+            transform: scale(1.08) rotate(-8deg);
+            box-shadow: 0 0 20px rgba(255, 193, 7, 0.8);
+        }
+
+        .profile-info h3 {
+            font-size: 1.8em;
+            margin-bottom: 8px;
+            color: var(--light-text);
+            font-weight: 700;
+        }
+
+        .profile-info p {
+            font-size: 1.05em;
+            opacity: 0.95;
+        }
+
+        .sidebar-nav {
+            width: 100%;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            width: 100%;
+        }
+
+        .sidebar-nav ul li {
+            margin-bottom: 18px;
+        }
+
+        .sidebar-nav ul li a {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 16px 25px;
+            color: var(--light-text);
+            font-size: 1.3em;
+            border-radius: 12px;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            font-weight: 600;
+        }
+
+        .sidebar-nav ul li a:hover,
+        .sidebar-nav ul li a.active {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: translateX(8px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 40px;
+            overflow-y: auto;
+            border-right: 1px solid var(--border-color); /* Separator line */
+        }
+
+        .dashboard-section {
+            display: none;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .dashboard-section.active {
+            display: block;
+        }
+
+        .main-content h2 {
+            font-size: 2.2em;
+            color: var(--primary-color);
+            margin-bottom: 35px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border-color);
+            font-weight: 700;
+        }
+        .section-description {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        /* Upload Video Form */
+        #upload-video-form, #edit-profile-form, #platform-settings-form {
+            max-width: 750px;
+            background-color: var(--bg-light);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px var(--shadow);
+            border: 1px solid var(--border-color);
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #upload-video-form .form-group, #edit-profile-form .form-group, #platform-settings-form .form-group {
+            margin-bottom: 25px;
+        }
+
+        #upload-video-form .btn, #edit-profile-form .btn, #platform-settings-form .btn {
+            width: auto;
+            margin-top: 15px;
+        }
+
+        /* Video List (Teacher & Student) */
+        .video-list, .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 35px;
+            padding: 20px 0;
+        }
+
+        .video-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .video-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px var(--hover-shadow);
+        }
+
+        .video-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .video-card-info {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-card-info h3 {
+            font-size: 1.4em;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: 700;
+        }
+
+        .video-card-info p {
+            font-size: 1em;
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3; /* Limit description to 3 lines */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-grow: 1;
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95em;
+            color: #777;
+            margin-top: 10px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .video-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .video-meta i {
+            color: var(--secondary-color);
+        }
+
+        .video-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .video-actions .btn {
+            padding: 10px 18px;
+            font-size: 1em;
+            flex-grow: 1;
+            min-width: 100px;
+        }
+
+        .no-content {
+            text-align: center;
+            padding: 60px;
+            color: #777;
+            font-size: 1.3em;
+            background-color: var(--bg-light);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 30px;
+            width: 100%;
+        }
+        .no-content .btn {
+            margin-top: 25px;
+        }
+        .no-content-table {
+            text-align: center !important;
+            padding: 20px !important;
+            color: #777 !important;
+            font-size: 1.1em !important;
+        }
+
+
+        /* Stats Cards */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background-color: var(--accent-color);
+            color: var(--dark-text);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-card h3 {
+            font-size: 1.4em;
+            margin-bottom: 12px;
+            color: #555;
+            font-weight: 700;
+        }
+
+        .stat-card p {
+            font-size: 3em;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+
+        /* Recent Activity / Student Lists */
+        .recent-activity {
+            background-color: var(--bg-light);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px var(--shadow);
+            border: 1px solid var(--border-color);
+            margin-bottom: 40px;
+        }
+
+        .recent-activity h3 {
+            font-size: 1.8em;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 700;
+        }
+
+        #student-login-log {
+            list-style: none;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        #student-login-log li {
+            padding: 12px 0;
+            border-bottom: 1px dashed var(--border-color);
+            font-size: 1.05em;
+            color: #555;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #student-login-log li:last-child {
+            border-bottom: none;
+        }
+        #student-login-log li span.log-time {
+            font-size: 0.9em;
+            color: #888;
+        }
+
+        .students-table-container {
+            overflow-x: auto;
+            background-color: var(--bg-light);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px var(--shadow);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+        }
+
+        .students-table {
+            width: 100%;
+            border-collapse: separate; /* Use separate for border-radius */
+            border-spacing: 0; /* Remove default spacing */
+            min-width: 700px; /* Ensure table doesn't get too small */
+        }
+
+        .students-table thead th {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            font-weight: 600;
+            font-size: 1.15em;
+            padding: 15px;
+            text-align: right;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .students-table thead th:first-child { border-top-right-radius: 10px; }
+        .students-table thead th:last-child { border-top-left-radius: 10px; }
+
+
+        .students-table tbody td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: right;
+            vertical-align: middle;
+            font-size: 1em;
+            color: #444;
+        }
+
+        .students-table tbody tr:nth-child(even) {
+            background-color: #f9fbfc;
+        }
+
+        .students-table tbody tr:hover {
+            background-color: #e6f0f5;
+        }
+
+        .students-table .btn {
+            padding: 8px 15px;
+            font-size: 0.95em;
+            margin: 0;
+        }
+
+        /* Student Progress */
+        .progress-info {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 35px;
+            box-shadow: 0 8px 20px var(--shadow);
+            text-align: center;
+            border: 1px solid rgba(0, 86, 179, 0.3);
+        }
+
+        .progress-info p {
+            font-size: 1.4em;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .progress-info span {
+            font-weight: 800;
+            font-size: 1.6em;
+            color: var(--accent-color);
+            display: inline-block;
+            margin-right: 5px;
+            margin-left: 5px;
+        }
+
+        #student-watch-history {
+            list-style: none;
+            background-color: var(--bg-light);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px var(--shadow);
+            border: 1px solid var(--border-color);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        #student-watch-history li {
+            padding: 12px 0;
+            border-bottom: 1px dashed var(--border-color);
+            font-size: 1.05em;
+            color: #555;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        #student-watch-history li:last-child {
+            border-bottom: none;
+        }
+        #student-watch-history li span {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        #student-watch-history li .watch-time {
+            font-size: 0.9em;
+            color: #888;
+        }
+
+
+        /* Video Player Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.4s forwards;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            margin: auto;
+            padding: 35px;
+            border-radius: 20px;
+            width: 95%;
+            max-width: 1000px;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+            animation: zoomIn 0.4s forwards;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .close-button {
+            color: #aaa;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            left: 25px; /* RTL alignment */
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: var(--primary-color);
+            transform: rotate(90deg);
+        }
+
+        .modal-content h3 {
+            font-size: 2.5em;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 800;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            background-color: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-wrapper video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            /* Disable right-click for saving/inspecting video */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .modal-video-description {
+            font-size: 1.15em;
+            color: #444;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .view-count-text {
+            font-size: 1.05em;
+            color: #666;
+            text-align: left; /* Align to bottom-left for RTL */
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: none;
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid var(--primary-color);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 0.5s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 15px;
+                border-radius: 0;
+            }
+            .header .logo h1 {
+                font-size: 1.7em;
+            }
+            .header .main-nav {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .header .main-nav a {
+                padding: 8px 15px;
+                font-size: 1em;
+            }
+
+            .hero {
+                flex-direction: column;
+                padding: 50px 20px;
+                gap: 30px;
+                margin-top: 20px;
+            }
+            .hero-content h2 {
+                font-size: 2.8em;
+            }
+            .hero-content p {
+                font-size: 1.3em;
+            }
+            .hero-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .btn {
+                width: 100%;
+            }
+
+            .dashboard-content, .student-content {
+                flex-direction: column;
+                margin-top: 20px;
+                border-radius: 0;
+                box-shadow: none;
+                min-height: auto;
+            }
+            .sidebar {
+                width: 100%;
+                padding: 25px;
+                border-radius: 0 0 20px 20px;
+                box-shadow: none; /* Remove sidebar inner shadow on mobile */
+            }
+            .sidebar-nav ul {
+                flex-direction: row; /* Horizontal on tablets */
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .sidebar-nav ul li {
+                margin-bottom: 0;
+            }
+            .sidebar-nav ul li a {
+                padding: 12px 18px;
+                font-size: 1.1em;
+                transform: none !important; /* Override translateX on hover/active for horizontal layout */
+            }
+            .sidebar-nav ul li a:hover,
+            .sidebar-nav ul li a.active {
+                transform: none !important;
+                box-shadow: none;
+            }
+            .main-content {
+                padding: 25px;
+                border-right: none; /* Remove separator line */
+            }
+            .main-content h2 {
+                font-size: 2em;
+                margin-bottom: 30px;
+            }
+
+            .video-list, .video-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 25px;
+            }
+
+            .students-table-container {
+                padding: 15px;
+            }
+            .students-table {
+                font-size: 0.9em;
+                min-width: 600px;
+            }
+            .students-table thead th, .students-table tbody td {
+                padding: 12px;
+            }
+
+            .about-content {
+                flex-direction: column;
+                align-items: center;
+            }
+            .about-text, .about-teacher-info, .about-features {
+                width: 100%;
+                max-width: 500px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .auth-card {
+                padding: 40px 25px;
+            }
+            .auth-card h2 {
+                font-size: 2.2em;
+            }
+            .auth-option-btn {
+                padding: 10px 20px;
+                font-size: 1.05em;
+            }
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                font-size: 1em;
+                padding: 12px 15px;
+            }
+
+            .modal-content {
+                width: 98%;
+                padding: 25px;
+            }
+            .modal-content h3 {
+                font-size: 2.2em;
+            }
+            .close-button {
+                font-size: 35px;
+                left: 15px;
+                top: 15px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header .logo h1 {
+                font-size: 1.4em;
+            }
+            .hero-content h2 {
+                font-size: 2.4em;
+            }
+            .hero-content p {
+                font-size: 1.1em;
+            }
+            
+            .auth-options {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .auth-option-btn {
+                width: 100%;
+            }
+
+            .dashboard-content, .student-content {
+                margin-top: 0;
+            }
+            .sidebar-nav ul {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .sidebar-nav ul li a {
+                justify-content: center;
+                padding: 10px 15px;
+            }
+            .main-content {
+                padding: 15px;
+            }
+            .main-content h2 {
+                font-size: 1.8em;
+            }
+            .video-list, .video-grid {
+                grid-template-columns: 1fr; /* Single column on small screens */
+                gap: 20px;
+            }
+            .stats-cards {
+                grid-template-columns: 1fr;
+            }
+            .students-table-container {
+                padding: 10px;
+            }
+            .students-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+                min-width: unset; /* Allow table to shrink */
+            }
+            .students-table thead, .students-table tbody, .students-table tr {
+                display: block;
+            }
+            .students-table th, .students-table td {
+                white-space: normal;
+            }
+            .students-table td {
+                display: block;
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+            .students-table td::before {
+                content: attr(data-label);
+                position: absolute;
+                right: 15px;
+                font-weight: 700;
+                color: var(--primary-color);
+            }
+            .students-table thead th {
+                display: none;
+            }
+            .video-card-info p {
+                -webkit-line-clamp: 2; /* Adjust description lines for smaller screens */
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+        /* الصورة الدائرية */
+        .profile-image {
+    width: clamp(250px, 30vw, 220px);
+    height: clamp(250px, 30vw, 220px);
+    border-radius: 50%;
+    border: 5px solid var(--gold);
+    padding: 5px;
+    
+    margin: 20px auto; /* تغيير margin لتوسيط أفقي */
+    display: block; /* لضمان أن margin: auto يعمل */
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(45deg, #0074D9, #7FDBFF);
+    z-index: 5;
+}
+        
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        
+        .profile-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.3);
+            pointer-events: none;
+        }
+        
+        /* هالة حول الصورة - ثابتة */
+        .profile-halo {
+            position: absolute;
+            width: calc(clamp(150px, 30vw, 220px) + 40px);
+            height: calc(clamp(150px, 30vw, 220px) + 40px);
+            border-radius: 50%;
+           
+            opacity: 0.7;
+            z-index: 4;
+        }
+        
+        /* بطاقة البرمجة والتصميم */
+       .design-card {
+    background: #0074D9;
+    color: white;
+    border-radius: 15px;
+    padding: 20px;
+    border: 2px solid rgba(0, 0, 0, 0);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    margin: 20px auto; /* تغيير margin لتوسيط أفقي */
+    max-width: 500px;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    display: block; /* لضمان عمل margin: auto */
+}
+        .design-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 65%, rgba(0, 255, 255, 0.05) 100%);
+            pointer-events: none;
+        }
+        
+        .design-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .design-title div {
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            color: var(--text-light);
+            font-weight: bold;
+        }
+        
+        .design-title .emoji {
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            color: var(--gold);
+        }
+        
+
+                /* صفحة الاتصال */
+        #contact-page {
+            display: block;
+            width: 100%;
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            background: rgb(4, 119, 220);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .phone-contact {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .phone-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(45deg, var(--gold), #ffc800);
+            color: #000;
+            font-weight: bold;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+            font-size: 1.1rem;
+        }
+
+        .phone-btn i {
+            margin-left: 8px;
+        }
+
+        .social-contact {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .social-contact p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        .social-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .social-btn i {
+            margin-left: 10px;
+            font-size: 1.2rem;
+        }
+
+        .whatsapp-btn {
+            background:linear-gradient(45deg, var(--whatsapp-color), #2bc800);
+        }
+         .whatsapp2-btn {
+            background: linear-gradient(45deg, var(--whatsapp-color),#126001);
+        }
+
+        .facebook-btn {
+            background: linear-gradient(45deg, var(--facebook-color), #0052ce);
+        }
+
+        .instagram-btn {
+            background: linear-gradient(45deg, var(--instagram-color), #7f1dc1);
+        }
+
+        .linkedin-btn {
+            background: linear-gradient(45deg, var(--linkedin-color), #053a60);
+        }
+
+        .github-btn {
+            background: linear-gradient(45deg, var(--github-color), #282828);
+        }
+        .youtube-btn {
+            background: linear-gradient(45deg, #FF0000, #CC0000);
+        }
+
+        /* تأثيرات عند التحميل */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .content > * {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        .content > *:nth-child(1) { animation-delay: 0.1s; }
+        .content > *:nth-child(2) { animation-delay: 0.3s; }
+        .content > *:nth-child(3) { animation-delay: 0.5s; }
+        .content > *:nth-child(4) { animation-delay: 0.7s; }
+        .content > *:nth-child(5) { animation-delay: 0.9s; }
+        .content > *:nth-child(6) { animation-delay: 1.1s; }
+
+        /* تحسينات للهواتف */
+        @media (max-width: 768px) {
+            .social-buttons {
+                gap: 12px;
+            }
+            
+            .social-btn {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .phone-btn {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+        }
+
+        #contact-page .main-title {
+    color: white;
+}
+
+
+ /* تأثيرات البرمجة - ثابتة */
+        .code-effects {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .code-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+
+
+
+         .separator {
+            margin: -6px 0px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .separator-line {
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        
+        .separator-emoji {
+            margin: 0 10px;
+            font-size: 1.5rem;
+            color: var(--gold);
+        }
+        
+        /* الزخرفة الإسلامية - ثابتة */
+        .islamic-decoration {
+            margin: 20px auto;
+            width: 200px;
+            height: 40px;
+            position: relative;
+            max-width: 100%;
+        }
+        
+        .wave {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+
+        
+        .social1-links {
+    display: flex;
+    gap: 15px; /* Space between buttons */
+    justify-content: center; /* Center the buttons */
+    padding: 10px;
+}
+
+.social1-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px; /* Button size */
+    height: 50px;
+    background-color: #ffffff; /* White background */
+    color: #333; /* Icon color */
+    border-radius: 50%; /* Circular buttons */
+    text-decoration: none;
+    font-size: 24px; /* Icon size */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.social1-links a:hover {
+    transform: translateY(-3px); /* Lift effect on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+    background-color: #f0f0f0; /* Slightly darker white on hover */
+}
+
+.social1-links a i {
+    color: #333; /* Ensure icon color is consistent */
+}
+
+/* Optional: Specific hover colors for each platform */
+.social1-links a[href*="facebook"]:hover {
+    color: #1877f2; /* Facebook blue */
+}
+.social1-links a[href*="whatsapp"]:hover {
+    color: #25d366; /* WhatsApp green */
+}
+.social1-links a[href*="youtube"]:hover {
+    color: #ff0000; /* YouTube red */
+}
+
+    </style>
+</head>
+<body>
+
+    <div class="background-animation">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+        <div class="circle circle-4"></div>
+        <div class="circle circle-5"></div>
+    </div>
+
+    <div class="container active" id="landing-page">
+        <header class="header">
+            <div class="logo">
+                <img src="https://scontent.faly8-1.fna.fbcdn.net/v/t39.30808-6/464431595_8392400884141290_7494451406885624706_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=vDFixEWo35sQ7kNvwHa1RnJ&_nc_oc=Adm8FFSSh4XHhRXXCaU7PF4ZG6-AJS0tqlESvIoJqmetGYQb3kvqMN1DxO5KdFD-cck&_nc_zt=23&_nc_ht=scontent.faly8-1.fna&_nc_gid=mKnvMozQIxItIlYQQNwAbA&oh=00_AfOTQhNKZ7WKYq99_ofWQL-mqsUQWhzcaAqWBjHtc3DsUQ&oe=684E016F" alt="شعار مستر أحمد الشورى">
+                <h1>منصة مستر أحمد الشورى</h1>
+            </div>
+            
+        </header>
+        <section class="hero">
+            <div class="hero-content">
+                <h2>أهلاً بكم في أكاديمية اللغة العربية المتميزة</h2>
+                <p>محتوى تعليمي حصري، تفاعلي وآمن لطلاب مستر أحمد الشورى في اللغة العربية، مصمم خصيصًا لضمان أعلى مستوى من الاستيعاب والتميز.</p>
+                <div class="hero-buttons">
+                    <button class="btn primary-btn" onclick="showScreen('auth-screen')"><i class="fas fa-play-circle"></i> ابدأ رحلتك التعليمية</button>
+                    <button class="btn outline-btn" onclick="showScreen('about-platform-screen')"><i class="fas fa-info-circle"></i> اكتشف المزيد</button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://scontent.faly8-2.fna.fbcdn.net/v/t39.30808-6/470229934_446515841835041_2413616035024142761_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=JM04iN_G6SQQ7kNvwF9lBAf&_nc_oc=AdmC668FZi9_VT4A3tuwXM1Xpll7K_bhwglMyO9_6TKwGw0WdWr2nMerQF-DbhLvDRg&_nc_zt=23&_nc_ht=scontent.faly8-2.fna&_nc_gid=jFHVAYtRQsRTpq-xPwzD5w&oh=00_AfOpUOIkhWxeczRGTXr1h-HTEHBygIdV9s5fDengQBxLiQ&oe=684DEA41" alt="صورة تعليم اللغة العربية">
+            </div>
+        </section>
+       
+    </div>
+
+    <div class="container" id="about-platform-screen">
+        <header class="header">
+            <div class="logo">
+                <img src="https://scontent.faly8-1.fna.fbcdn.net/v/t39.30808-6/464431595_8392400884141290_7494451406885624706_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=vDFixEWo35sQ7kNvwHa1RnJ&_nc_oc=Adm8FFSSh4XHhRXXCaU7PF4ZG6-AJS0tqlESvIoJqmetGYQb3kvqMN1DxO5KdFD-cck&_nc_zt=23&_nc_ht=scontent.faly8-1.fna&_nc_gid=mKnvMozQIxItIlYQQNwAbA&oh=00_AfOTQhNKZ7WKYq99_ofWQL-mqsUQWhzcaAqWBjHtc3DsUQ&oe=684E016F" alt="شعار مستر أحمد الشورى">
+                <h1>منصة مستر أحمد الشورى</h1>
+            </div>
+            <nav class="main-nav">
+                <button class="back-btn" onclick="showScreen('landing-page')"><i class="fas fa-arrow-right"></i> العودة للرئيسية</button>
+            </nav>
+        </header>
+        <section class="about-section">
+            <h2>اكتشف منصة مستر أحمد الشورى</h2>
+            <div class="about-content">
+                <div class="about-teacher-info">
+                    <img src="https://scontent.faly8-1.fna.fbcdn.net/v/t39.30808-6/470241470_446516861834939_4004555550868124438_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=Id6ihm1igLgQ7kNvwG7ojxG&_nc_oc=Adlxn9zxTKuczKxat4Z-PqqAK1wbHdplIi4zB7OG0FxKChlTLw6paM1CCdQeM4pYTe0&_nc_zt=23&_nc_ht=scontent.faly8-1.fna&_nc_gid=n1cchjETyQro7E4beZercg&oh=00_AfMqJpF9vN7S5fp-nr9JXv92gt9ALM5dg1f09jblFDZFmg&oe=684DD7AC" alt="صورة المستر">
+                    <h3>مستر أحمد الشورى</h3>
+                    <p>مستر أحمد الشورى هو مدرس متخصص في اللغة العربية، يقدم شرحًا مبسطًا ومفصلًا لجميع فروع المادة لضمان فهم عميق وتحقيق أعلى الدرجات.</p>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/ahmed.elshora2/about_overview?locale=ar_AR" target="_blank" aria-label="فيسبوك"><i class="fab fa-facebook"></i></a>
+                        <a href="https://wa.me/+201018979588" target="_blank" aria-label="واتساب"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://www.youtube.com/@mrahmedelshora" target="_blank" aria-label="يوتيوب"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="about-features">
+                    <h3>مميزات المنصة</h3>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> <strong>شرح مبسط ومفصل:</strong> فيديوهات تعليمية عالية الجودة تغطي جميع جوانب المنهج.</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>محتوى تفاعلي:</strong> امتحانات وتدريبات تفاعلية لتعزيز الفهم.</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>متابعة مستمرة:</strong> تقارير مفصلة عن تقدم الطلاب لمتابعة الأداء.</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>أمان وحماية:</strong> بيئة تعليمية آمنة ومحمية تضمن خصوصية الطلاب.</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>وصول سهل:</strong> تعلم في أي وقت ومن أي مكان يناسبك.</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>تحديثات مستمرة:</strong> إضافة محتوى جديد وتحديثات دورية للمنصة.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- هالة الصورة -->
+            <div class="profile-halo"></div>
+            
+            <!-- الصورة الدائرية -->
+            <div class="profile-image">
+                <img src="https://scontent.faly8-2.fna.fbcdn.net/v/t39.30808-6/476378289_1168305034818049_8033882813266140408_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=P2oCppDUDh8Q7kNvwHO7jSq&_nc_oc=Adk-4dwDqE_srcFbeZqXwFlqhB5YVk2yQXlc6U6DrApx2WTga-eWUyxNlWcFUs5_JCE&_nc_zt=23&_nc_ht=scontent.faly8-2.fna&_nc_gid=gtaP94no4-YVrkjb32AOKw&oh=00_AfP2Bxtzj3U8x8TYoY5PUqxWS08mCcEFC7u2wqUQaog7Cg&oe=684E04D4" alt="الصورة الشخصية">
+            </div>
+            
+            <!-- بطاقة البرمجة والتصميم -->
+            <div class="design-card">
+                <div class="design-title">
+                    <div class="emoji">✨</div>
+                   <div>بَرْمَجَةٌ وَتَصْمِيمٌ</div>
+                    <div class="emoji">✨</div>
+                    
+                </div>
+                 <div class="separator">
+                    <div class="separator-line"></div>
+                    <div class="separator-emoji">✧</div>
+                    <div class="separator-line"></div>
+                </div>
+               
+                
+               <div class="name">الْمُهَنْدِسُ / عَبْدُ الرَّحْمَنِ مُحَمَّدٍ كَمَالْ حَمُودَةٌ</div>
+                 <div class="separator">
+                    <div class="separator-line"></div>
+                    <div class="separator-emoji">✧</div>
+                    <div class="separator-line"></div>
+                </div>
+                <!-- تأثيرات البرمجة -->
+                <div class="code-effects">
+                    <div class="code-dot" style="background:#ff0000;"></div>
+                    <div class="code-dot" style="background: #FFDC00;"></div>
+                    <div class="code-dot" style="background: #2ECC40;"></div>
+                    <div class="code-dot" style="background: #0074D9;"></div>
+                    <div class="code-dot" style="background: #B10DC9;"></div>
+                    <div class="code-dot" style="background: #00ffd5;"></div>
+                    <div class="code-dot" style="background: #ffffff;"></div>
+                    <div class="code-dot" style="background: #000000;"></div>
+                </div>
+            </div>
+              
+            
+            <!-- صفحة الاتصال -->
+            <section id="contact-page" class="page-section">
+                <h2 class="main-title">اتصل بي 📩</h2>
+                <div class="phone-contact">
+                    <a href="tel:+201201898518" class="phone-btn" aria-label="اتصل بنا مباشرة">
+                        <i class="fas fa-phone"></i> +201201898518
+                    </a>
+                </div>
+                <div class="social-contact">
+                    <p>✨تواصل معي مباشرةً عبر وسائل التواصل الإجتماعي !✨</p>
+                    <div class="social-buttons">
+                        <a href="https://wa.me/+201201898518" class="social-btn whatsapp-btn" target="_blank" aria-label="تواصل معنا عبر واتساب">
+                            <i class="fab fa-whatsapp"></i> تواصل عبر واتساب1️⃣ 
+                        </a>
+                         <a href="https://wa.me/+201029952248" class="social-btn whatsapp2-btn" target="_blank" aria-label="تواصل معنا عبر واتساب">
+                            <i class="fab fa-whatsapp"></i> تواصل عبر واتساب2️⃣
+                        </a>
+                        <a href="https://www.facebook.com/abdelrahman.hamouda.18?locale=ar_AR" class="social-btn facebook-btn" target="_blank" aria-label="تواصل معنا عبر فيسبوك">
+                            <i class="fab fa-facebook-f"></i> تواصل عبر فيسبوك 
+                        </a>
+                        <a href="https://www.instagram.com/hamouda_1000/" class="social-btn instagram-btn" target="_blank" aria-label="تواصل معنا عبر إنستغرام">
+                            <i class="fab fa-instagram"></i> تواصل عبر إنستغرام 
+                        </a>
+                        <a href="https://www.linkedin.com/in/abdo-hamouda-a3b609328/" class="social-btn linkedin-btn" target="_blank" aria-label="تواصل معنا عبر لينكدإن">
+                            <i class="fab fa-linkedin-in"></i>   لينكدإن (LinkedIn)
+                        </a>
+                        <a href="https://github.com/hamouda-10" class="social-btn github-btn" target="_blank" aria-label="تواصل معنا عبر جيت هاب">
+                            <i class="fab fa-github"></i>  جيت هاب (GitHub)
+                        </a>
+                        <a href="https://youtube.com/@hamouda_100?si=cH4WdpEmqRmt4Upu" class="social-btn youtube-btn" target="_blank" aria-label="قناة اليوتيوب">
+                            <i class="fab fa-youtube"></i> قناة اليوتيوب
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+      
+        
+    </div>
+
+    <div class="container" id="auth-screen">
+        <header class="header">
+            <div class="logo">
+                <img src="https://scontent.faly8-1.fna.fbcdn.net/v/t39.30808-6/464431595_8392400884141290_7494451406885624706_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=vDFixEWo35sQ7kNvwHa1RnJ&_nc_oc=Adm8FFSSh4XHhRXXCaU7PF4ZG6-AJS0tqlESvIoJqmetGYQb3kvqMN1DxO5KdFD-cck&_nc_zt=23&_nc_ht=scontent.faly8-1.fna&_nc_gid=mKnvMozQIxItIlYQQNwAbA&oh=00_AfOTQhNKZ7WKYq99_ofWQL-mqsUQWhzcaAqWBjHtc3DsUQ&oe=684E016F" alt="شعار مستر أحمد الشورى">
+                <h1>منصة مستر أحمد الشورى</h1>
+            </div>
+            <nav class="main-nav">
+                <button class="back-btn" onclick="showScreen('landing-page')"><i class="fas fa-arrow-right"></i> العودة للرئيسية</button>
+            </nav>
+        </header>
+        <section class="auth-section">
+            <div class="auth-card">
+                <h2>تسجيل الدخول إلى المنصة</h2>
+                <div class="auth-options">
+                    <button class="btn auth-option-btn active" id="student-tab" onclick="showAuthForm('student')"><i class="fas fa-user-graduate"></i> دخول كطالب</button>
+                    <button class="btn auth-option-btn" id="teacher-tab" onclick="showAuthForm('teacher')"><i class="fas fa-chalkboard-teacher"></i> دخول كمعلم</button>
+                </div>
+
+                <form id="student-form" class="auth-form active">
+                    <div class="form-group">
+                        <label for="student-name"><i class="fas fa-user"></i> الاسم كاملاً (ثلاثي):</label>
+                        <input type="text" id="student-name" placeholder="مثال: أحمد محمد علي" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="student-phone"><i class="fas fa-phone"></i> رقم الهاتف:</label>
+                        <input type="tel" id="student-phone" placeholder="مثال: 01012345678" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="student-profile-pic-upload"><i class="fas fa-image"></i> صورتك الشخصية (اختياري):</label>
+                        <input type="file" id="student-profile-pic-upload" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label for="student-grade-type"><i class="fas fa-university"></i> نوع الصف:</label>
+                        <select id="student-grade-type" required>
+                            <option value="">اختر النوع</option>
+                            <option value="عام">عام</option>
+                            <option value="أزهر">أزهر</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="student-grade"><i class="fas fa-book-open"></i> الصف الدراسي:</label>
+                        <select id="student-grade" required>
+                            <option value="">اختر الصف</option>
+                            <option value="أول ثانوي">أول ثانوي</option>
+                            <option value="ثاني ثانوي">ثاني ثانوي</option>
+                            <option value="ثالث ثانوي">ثالث ثانوي</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn primary-btn"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</button>
+                    <p class="form-message" id="student-form-message"></p>
+                </form>
+
+                <form id="teacher-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="teacher-password"><i class="fas fa-lock"></i> كلمة مرور المعلم:</label>
+                        <input type="password" id="teacher-password" placeholder="أدخل كلمة المرور" required>
+                    </div>
+                    <button type="submit" class="btn primary-btn"><i class="fas fa-user-shield"></i> تسجيل الدخول</button>
+                    <p class="form-message" id="teacher-form-message"></p>
+                </form>
+            </div>
+        </section>
+        
+    </div>
+
+    <div class="container" id="teacher-dashboard">
+        <header class="header">
+            <div class="logo">
+                <img src="https://scontent.faly8-1.fna.fbcdn.net/v/t39.30808-6/464431595_8392400884141290_7494451406885624706_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=vDFixEWo35sQ7kNvwHa1RnJ&_nc_oc=Adm8FFSSh4XHhRXXCaU7PF4ZG6-AJS0tqlESvIoJqmetGYQb3kvqMN1DxO5KdFD-cck&_nc_zt=23&_nc_ht=scontent.faly8-1.fna&_nc_gid=mKnvMozQIxItIlYQQNwAbA&oh=00_AfOTQhNKZ7WKYq99_ofWQL-mqsUQWhzcaAqWBjHtc3DsUQ&oe=684E016F" alt="شعار مستر أحمد الشورى">
+                <h1>لوحة تحكم مستر أحمد الشورى</h1>
+            </div>
+            <nav class="main-nav">
+                <button class="back-btn" onclick="logoutTeacher()"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
+            </nav>
+        </header>
+        <section class="dashboard-content">
+            <aside class="sidebar">
+                <div class="profile-info">
+                    <img src="https://scontent.faly8-1.fna.fbcdn.net/v/t39.30808-6/470241470_446516861834939_4004555550868124438_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=Id6ihm1igLgQ7kNvwG7ojxG&_nc_oc=Adlxn9zxTKuczKxat4Z-PqqAK1wbHdplIi4zB7OG0FxKChlTLw6paM1CCdQeM4pYTe0&_nc_zt=23&_nc_ht=scontent.faly8-1.fna&_nc_gid=n1cchjETyQro7E4beZercg&oh=00_AfMqJpF9vN7S5fp-nr9JXv92gt9ALM5dg1f09jblFDZFmg&oe=684DD7AC" alt="صورة المستر" class="profile-avatar">
+                    <h3>مستر أحمد الشورى</h3>
+                    <p>مدرس لغة عربية</p>
+                   <div class="social1-links">
+                        <a href="https://www.facebook.com/ahmed.elshora2/about_overview?locale=ar_AR" target="_blank" aria-label="فيسبوك"><i class="fab fa-facebook"></i></a>
+                        <a href="https://wa.me/+201018979588" target="_blank" aria-label="واتساب"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://www.youtube.com/@mrahmedelshora" target="_blank" aria-label="يوتيوب"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <nav class="sidebar-nav">
+                    <ul>
+                        <li><a href="#" class="active" onclick="showTeacherSection('upload-video')"><i class="fas fa-cloud-upload-alt"></i> رفع فيديو جديد</a></li>
+                        <li><a href="#" onclick="showTeacherSection('manage-videos')"><i class="fas fa-video"></i> إدارة الفيديوهات</a></li>
+                        <li><a href="#" onclick="showTeacherSection('student-stats')"><i class="fas fa-chart-line"></i> إحصائيات الطلاب</a></li>
+                        <li><a href="#" onclick="showTeacherSection('student-list')"><i class="fas fa-users"></i> قائمة الطلاب</a></li>
+                        <li><a href="#" onclick="showTeacherSection('platform-settings')"><i class="fas fa-cog"></i> إعدادات المنصة</a></li>
+                    </ul>
+                </nav>
+            </aside>
+            <main class="main-content">
+                <div class="dashboard-section active" id="upload-video">
+                    <h2>رفع فيديو جديد</h2>
+                    <form id="upload-video-form">
+                        <div class="form-group">
+                            <label for="video-title">عنوان الفيديو:</label>
+                            <input type="text" id="video-title" placeholder="مثال: شرح درس النحو: كان وأخواتها" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="video-description">وصف الفيديو:</label>
+                            <textarea id="video-description" placeholder="اكتب وصفًا شاملاً وموجزًا لمحتوى الفيديو..." rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="video-thumbnail">صورة مصغرة للفيديو (اختياري، يفضل JPG/PNG):</label>
+                            <input type="file" id="video-thumbnail" accept="image/*">
+                        </div>
+                        <div class="form-group">
+                            <label for="video-file">ملف الفيديو (بصيغة MP4، الحد الأقصى للحجم 2GB - *الحد الأقصى للتجربة فقط*):</label>
+                            <input type="file" id="video-file" accept="video/mp4" required>
+                        </div>
+                           <div class="form-group">
+                                <label for="video-target-grade-type">نوع الصف المستهدف:</label>
+                                <select id="video-target-grade-type" required>
+                                    <option value="">اختر النوع</option>
+                                    <option value="عام">عام</option>
+                                    <option value="أزهر">أزهر</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="video-target-grade">الصف الدراسي المستهدف:</label>
+                                <select id="video-target-grade" required>
+                                    <option value="">اختر الصف</option>
+                                    <option value="أول ثانوي">أول ثانوي</option>
+                                    <option value="ثاني ثانوي">ثاني ثانوي</option>
+                                    <option value="ثالث ثانوي">ثالث ثانوي</option>
+                                </select>
+                            </div>
+                        <button type="submit" class="btn primary-btn"><i class="fas fa-paper-plane"></i> رفع الفيديو الآن</button>
+                        <div class="loading-spinner" id="upload-spinner"></div>
+                        <p class="form-message" id="upload-video-message"></p>
+                    </form>
+                </div>
+
+                <div class="dashboard-section" id="manage-videos">
+                    <h2>إدارة الفيديوهات</h2>
+                    <p class="section-description">يمكنك عرض، تعديل، أو حذف الفيديوهات المرفوعة والتحقق من تفاصيل كل فيديو.</p>
+                    <div class="video-list" id="teacher-video-list">
+                        <div class="no-content">
+                            <p><i class="fas fa-exclamation-circle"></i> لا توجد فيديوهات مرفوعة حتى الآن.</p>
+                            <button class="btn primary-btn" onclick="showTeacherSection('upload-video')"><i class="fas fa-plus-circle"></i> ابدأ برفع فيديو جديد</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-section" id="student-stats">
+                    <h2>إحصائيات الطلاب</h2>
+                    <p class="section-description">نظرة عامة على أداء وتفاعل الطلاب مع المحتوى.</p>
+                    <div class="stats-cards">
+                        <div class="stat-card">
+                            <h3><i class="fas fa-users"></i> إجمالي الطلاب</h3>
+                            <p id="total-students">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3><i class="fas fa-video"></i> إجمالي الفيديوهات</h3>
+                            <p id="total-videos">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3><i class="fas fa-chart-bar"></i> نسبة التفاعل</h3>
+                            <p id="avg-engagement">0%</p>
+                        </div>
+                    </div>
+                    <div class="recent-activity">
+                        <h3><i class="fas fa-history"></i> سجل دخول الطلاب الأخير</h3>
+                        <ul id="student-login-log">
+                            <li>لا توجد سجلات دخول حديثة.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="dashboard-section" id="student-list">
+                    <h2>قائمة الطلاب</h2>
+                    <p class="section-description">عرض جميع الطلاب المسجلين وإحصائيات مفصلة لكل طالب.</p>
+                    <div class="students-table-container">
+                        <table class="students-table">
+                            <thead>
+                                <tr>
+                                    <th>الاسم</th>
+                                    <th>رقم الهاتف</th>
+                                    <th>الصف</th>
+                                    <th>نوع الصف</th>
+                                    <th>عدد الفيديوهات المشاهدة</th>
+                                    <th>تفاصيل إضافية</th>
+                                </tr>
+                            </thead>
+                            <tbody id="registered-students-body">
+                                <tr><td colspan="6" class="no-content-table">لا يوجد طلاب مسجلون حتى الآن.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="dashboard-section" id="platform-settings">
+                    <h2>إعدادات المنصة</h2>
+                    <p class="section-description">إدارة الإعدادات العامة للمنصة مثل رسائل الترحيب، بيانات الاتصال، وخصائص الأمان.</p>
+                    <form id="platform-settings-form">
+                        <div class="form-group">
+                            <label for="welcome-message">رسالة الترحيب للطلاب:</label>
+                            <textarea id="welcome-message" rows="3" placeholder="أهلاً بكم في منصة مستر أحمد الشورى التعليمية!"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-email">البريد الإلكتروني للدعم:</label>
+                            <input type="email" id="contact-email" placeholder="hamoudaabdo689@gmail.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-phone">رقم هاتف الدعم:</label>
+                            <input type="tel" id="contact-phone" placeholder="01018979588">
+                        </div>
+                        <div class="form-group">
+                            <label for="security-level">مستوى الأمان (للفيديوهات):</label>
+                            <select id="security-level">
+                                <option value="عادي">عادي (تشغيل قياسي)</option>
+                                <option value="متوسط">متوسط (منع التحميل)</option>
+                                <option value="عالي">عالي (منع التحميل ولقطات الشاشة)</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn primary-btn"><i class="fas fa-save"></i> حفظ الإعدادات</button>
+                        <p class="form-message" id="settings-message"></p>
+                    </form>
+                </div>
+
+            </main>
+        </section>
+
+    </div>
+
+    <div class="container" id="student-dashboard">
+        <header class="header">
+            <div class="logo">
+                <img src="https://scontent.faly8-1.fna.fbcdn.net/v/t39.30808-6/470241470_446516861834939_4004555550868124438_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=Id6ihm1igLgQ7kNvwG7ojxG&_nc_oc=Adlxn9zxTKuczKxat4Z-PqqAK1wbHdplIi4zB7OG0FxKChlTLw6paM1CCdQeM4pYTe0&_nc_zt=23&_nc_ht=scontent.faly8-1.fna&_nc_gid=n1cchjETyQro7E4beZercg&oh=00_AfMqJpF9vN7S5fp-nr9JXv92gt9ALM5dg1f09jblFDZFmg&oe=684DD7AC" alt="شعار مستر أحمد الشورى">
+                <h1>مرحباً بك يا <span id="student-dashboard-name">طالب!</span></h1>
+            </div>
+            <nav class="main-nav">
+                   <button class="back-btn" onclick="logoutStudent()"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
+            </nav>
+        </header>
+        <section class="student-content">
+            <aside class="sidebar">
+                <div class="profile-info">
+                    <img src="https://via.placeholder.com/150/ADD8E6/FFFFFF?text=Student" alt="صورة الطالب" class="profile-avatar" id="student-sidebar-avatar">
+                    <h3 id="student-profile-name"></h3>
+                    <p id="student-profile-info"></p>
+                </div>
+                <nav class="sidebar-nav">
+                    <ul>
+                        <li><a href="#" class="active" onclick="showStudentSection('my-videos')"><i class="fas fa-video"></i> فيديوهاتي الدراسية</a></li>
+                        <li><a href="#" onclick="showStudentSection('my-progress')"><i class="fas fa-chart-line"></i> تقدمي الدراسي</a></li>
+                        <li><a href="#" onclick="showStudentSection('my-profile')"><i class="fas fa-user-circle"></i> ملفي الشخصي</a></li>
+                    </ul>
+                </nav>
+            </aside>
+            <main class="main-content">
+                <div class="dashboard-section active" id="my-videos">
+                    <h2>فيديوهاتك الدراسية المخصصة لصفك</h2>
+                    <p class="section-description">اختر الفيديو الذي ترغب في مشاهدته وابدأ التعلم.</p>
+                    <div class="video-grid" id="student-video-grid">
+                        <div class="no-content">
+                            <p><i class="fas fa-info-circle"></i> لا توجد فيديوهات متاحة لصفك حالياً.</p>
+                            <p>تأكد من اختيار الصف الصحيح عند تسجيل الدخول أو تواصل مع المستر.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-section" id="my-progress">
+                    <h2>تقدمي الدراسي</h2>
+                    <p class="section-description">تتبع مشاهداتك وتقدمك في فيديوهات مستر أحمد الشورى.</p>
+                    <div class="progress-info">
+                        <p><i class="fas fa-check-circle"></i> عدد الفيديوهات التي شاهدتها: <span id="videos-watched-count">0</span></p>
+                        <p><i class="fas fa-hourglass-half"></i> إجمالي وقت المشاهدة التقريبي: <span id="total-watch-time">0 دقائق</span></p>
+                    </div>
+                    <h3><i class="fas fa-list-alt"></i> سجل مشاهداتي</h3>
+                    <ul id="student-watch-history">
+                        <li>لا توجد سجلات مشاهدة حتى الآن.</li>
+                    </ul>
+                </div>
+
+                <div class="dashboard-section" id="my-profile">
+                    <h2>ملفي الشخصي</h2>
+                    <p class="section-description">يمكنك تحديث بياناتك الشخصية وصورتك.</p>
+                    <form id="edit-profile-form">
+                        <div class="form-group">
+                            <label for="edit-student-name">الاسم كاملاً:</label>
+                            <input type="text" id="edit-student-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-student-phone">رقم الهاتف:</label>
+                            <input type="tel" id="edit-student-phone" disabled> </div>
+                        <div class="form-group">
+                            <label for="edit-student-grade-type">نوع الصف:</label>
+                            <select id="edit-student-grade-type" disabled>
+                                <option value="عام">عام</option>
+                                <option value="أزهر">أزهر</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-student-grade">الصف الدراسي:</label>
+                            <select id="edit-student-grade" disabled>
+                                <option value="أول ثانوي">أول ثانوي</option>
+                                <option value="ثاني ثانوي">ثاني ثانوي</option>
+                                <option value="ثالث ثانوي">ثالث ثانوي</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-student-profile-pic">تغيير صورتك الشخصية:</label>
+                            <input type="file" id="edit-student-profile-pic" accept="image/*">
+                        </div>
+                        <button type="submit" class="btn primary-btn"><i class="fas fa-save"></i> حفظ التغييرات</button>
+                        <p class="form-message" id="edit-profile-message"></p>
+                    </form>
+                </div>
+            </main>
+        </section>
+
+    </div>
+
+    <div id="video-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeVideoModal()">&times;</span>
+            <h3 id="modal-video-title">عنوان الفيديو</h3>
+            <div class="video-wrapper">
+                <video id="player" controls controlsList="nodownload" oncontextmenu="return false;" disablePictureInPicture>
+                    <source id="video-source" src="" type="video/mp4">
+                    متصفحك لا يدعم تشغيل الفيديوهات.
+                </video>
+            </div>
+            <p id="modal-video-description" class="modal-video-description">وصف الفيديو هنا.</p>
+            <p class="view-count-text">عدد المشاهدات: <span id="modal-view-count">0</span></p>
+        </div>
+    </div>
+
+
+    <script>
+        // --- Global State Management (Simulated Backend Data) ---
+        // In a real application, this data would come from a secure backend server and database.
+        // This is for demonstration of the front-end functionality and user experience.
+
+        const TEACHER_PASSWORD = "55555"; // In a real app, this would be hashed and stored securely.
+        let currentUser = JSON.parse(sessionStorage.getItem('currentUser')) || null; // Stores { type: 'student'/'teacher', data: { ... } }
+
+        // Load data from localStorage or initialize empty arrays/objects
+        let students = JSON.parse(localStorage.getItem('students')) || [];
+        let videos = JSON.parse(localStorage.getItem('videos')) || [];
+        let studentLoginLog = JSON.parse(localStorage.getItem('studentLoginLog')) || [];
+        let studentWatchHistory = JSON.parse(localStorage.getItem('studentWatchHistory')) || {}; // { studentId: [{ videoId, title, watchedAt }] }
+        let platformSettings = JSON.parse(localStorage.getItem('platformSettings')) || {
+            welcomeMessage: "أهلاً بكم في منصة مستر أحمد الشورى التعليمية!",
+            contactEmail: "support@yourdomain.com",
+            contactPhone: "010XXXXXXXXX",
+            securityLevel: "عادي"
+        };
+
+
+        // Save data to localStorage (simulated persistence)
+        function saveData() {
+            localStorage.setItem('students', JSON.stringify(students));
+            localStorage.setItem('videos', JSON.stringify(videos));
+            localStorage.setItem('studentLoginLog', JSON.stringify(studentLoginLog));
+            localStorage.setItem('studentWatchHistory', JSON.stringify(studentWatchHistory));
+            localStorage.setItem('platformSettings', JSON.stringify(platformSettings));
+            sessionStorage.setItem('currentUser', JSON.stringify(currentUser)); // Persist current user session
+        }
+
+        // --- UI Helper Functions ---
+        function showMessage(elementId, message, isSuccess = false) {
+            const messageElement = document.getElementById(elementId);
+            messageElement.textContent = message;
+            messageElement.classList.remove('success', 'error'); // Remove both
+            if (isSuccess) {
+                messageElement.classList.add('success');
+            } else {
+                messageElement.classList.add('error');
+            }
+            messageElement.classList.add('show');
+            setTimeout(() => {
+                messageElement.classList.remove('show');
+                messageElement.textContent = ''; // Clear message after fading
+            }, 3000); // Hide after 3 seconds
+        }
+
+        function clearFormMessages() {
+            document.querySelectorAll('.form-message').forEach(el => {
+                el.classList.remove('show', 'success', 'error');
+                el.textContent = '';
+            });
+        }
+
+        // --- Screen Navigation ---
+        const screens = document.querySelectorAll('.container');
+
+        function showScreen(screenId) {
+            screens.forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+            window.scrollTo(0, 0); // Scroll to top when changing screens
+        }
+
+        // --- Authentication Screen Logic ---
+        function showAuthForm(type) {
+            document.getElementById('student-tab').classList.remove('active');
+            document.getElementById('teacher-tab').classList.remove('active');
+            document.getElementById('student-form').classList.remove('active');
+            document.getElementById('teacher-form').classList.remove('active');
+
+            if (type === 'student') {
+                document.getElementById('student-tab').classList.add('active');
+                document.getElementById('student-form').classList.add('active');
+            } else {
+                document.getElementById('teacher-tab').classList.add('active');
+                document.getElementById('teacher-form').classList.add('active');
+            }
+            clearFormMessages();
+        }
+
+        document.getElementById('student-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearFormMessages();
+            const name = document.getElementById('student-name').value.trim();
+            const phone = document.getElementById('student-phone').value.trim();
+            const profilePicFile = document.getElementById('student-profile-pic-upload').files[0];
+            const gradeType = document.getElementById('student-grade-type').value;
+            const grade = document.getElementById('student-grade').value;
+            const messageElementId = 'student-form-message';
+
+            if (!name || !phone || !gradeType || !grade) {
+                showMessage(messageElementId, 'الرجاء إدخال جميع البيانات المطلوبة.', false);
+                return;
+            }
+
+            const nameParts = name.split(' ');
+            if (nameParts.length < 3) {
+                showMessage(messageElementId, 'الرجاء إدخال الاسم كاملاً (ثلاثي).', false);
+                return;
+            }
+
+            if (!/^(01)[0-9]{9}$/.test(phone)) {
+                showMessage(messageElementId, 'الرجاء إدخال رقم هاتف مصري صحيح (يبدأ بـ 01 و11 رقمًا).', false);
+                return;
+            }
+
+            // Simulate student registration/login
+            let student = students.find(s => s.phone === phone);
+            let profilePicUrl = 'https://via.placeholder.com/150/ADD8E6/FFFFFF?text=Student'; // Default avatar
+
+            const processLogin = (picUrl) => {
+                if (!student) {
+                    // New student registration
+                    student = {
+                        id: Date.now().toString(), // Unique ID for simplicity
+                        name: name,
+                        phone: phone,
+                        profilePic: picUrl,
+                        gradeType: gradeType,
+                        grade: grade,
+                        loginCount: 0,
+                        registrationDate: new Date().toLocaleDateString('ar-EG')
+                    };
+                    students.push(student);
+                    showMessage(messageElementId, 'تم التسجيل بنجاح! جاري تحويلك لمنصة الطالب.', true);
+                } else {
+                    // Existing student login
+                    showMessage(messageElementId, 'أهلاً بك مجدداً! جاري تحويلك لمنصة الطالب.', true);
+                    // Update grade/type if changed (optional, could be denied in real app)
+                    student.gradeType = gradeType;
+                    student.grade = grade;
+                    if (picUrl !== profilePicUrl) { // Only update if a new picture was uploaded
+                        student.profilePic = picUrl;
+                    }
+                }
+
+                student.loginCount++;
+                studentLoginLog.unshift({ name: student.name, phone: student.phone, time: new Date().toLocaleString('ar-EG', { dateStyle: 'medium', timeStyle: 'short' }) });
+                if (studentLoginLog.length > 50) studentLoginLog.pop(); // Keep log manageable
+
+                currentUser = { type: 'student', data: student };
+                saveData();
+                
+                setTimeout(() => {
+                    updateStudentDashboard();
+                    showScreen('student-dashboard');
+                }, 1000);
+            };
+
+            if (profilePicFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profilePicUrl = e.target.result;
+                    processLogin(profilePicUrl);
+                };
+                reader.readAsDataURL(profilePicFile);
+            } else {
+                processLogin(student ? student.profilePic : profilePicUrl); // Use existing pic if available, otherwise default
+            }
+        });
+
+        document.getElementById('teacher-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearFormMessages();
+            const password = document.getElementById('teacher-password').value;
+            const messageElementId = 'teacher-form-message';
+
+            if (password === TEACHER_PASSWORD) {
+                showMessage(messageElementId, 'تسجيل دخول ناجح! جاري تحويلك للوحة تحكم المعلم.', true);
+                currentUser = { type: 'teacher', data: { name: 'مستر أحمد الشورى', id: 'teacher1' } }; // Simulate teacher data
+                
+                setTimeout(() => {
+                    updateTeacherDashboard();
+                    showScreen('teacher-dashboard');
+                }, 1000);
+            } else {
+                showMessage(messageElementId, 'كلمة المرور غير صحيحة. حاول مرة أخرى.', false);
+            }
+        });
+
+        // --- Teacher Dashboard Logic ---
+        function updateTeacherDashboard() {
+            if (currentUser && currentUser.type === 'teacher') {
+                // Update stats
+                document.getElementById('total-students').textContent = students.length;
+                document.getElementById('total-videos').textContent = videos.length;
+                
+                // Calculate average engagement (simplified for demo: count unique students who watched at least one video)
+                const uniqueViewers = new Set();
+                for (const studentId in studentWatchHistory) {
+                    if (studentWatchHistory[studentId].length > 0) {
+                        uniqueViewers.add(studentId);
+                    }
+                }
+                document.getElementById('avg-engagement').textContent = students.length > 0 ? (uniqueViewers.size / students.length * 100).toFixed(0) + '%' : '0%';
+
+                // Update student login log
+                const logList = document.getElementById('student-login-log');
+                logList.innerHTML = '';
+                if (studentLoginLog.length === 0) {
+                    logList.innerHTML = '<li><i class="fas fa-info-circle"></i> لا توجد سجلات دخول حديثة.</li>';
+                } else {
+                    studentLoginLog.forEach(log => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<span>${log.name} (${log.phone})</span> <span class="log-time">${log.time}</span>`;
+                        logList.appendChild(li);
+                    });
+                }
+
+                // Update registered students table
+                const studentsTableBody = document.getElementById('registered-students-body');
+                studentsTableBody.innerHTML = '';
+                if (students.length === 0) {
+                    studentsTableBody.innerHTML = '<tr><td colspan="6" class="no-content-table">لا يوجد طلاب مسجلون حتى الآن.</td></tr>';
+                } else {
+                    students.forEach(student => {
+                        const tr = document.createElement('tr');
+                        const watchedCount = studentWatchHistory[student.id] ? studentWatchHistory[student.id].length : 0;
+                        tr.innerHTML = `
+                            <td data-label="الاسم">${student.name}</td>
+                            <td data-label="رقم الهاتف">${student.phone}</td>
+                            <td data-label="الصف">${student.grade}</td>
+                            <td data-label="نوع الصف">${student.gradeType}</td>
+                            <td data-label="عدد الفيديوهات المشاهدة">${watchedCount}</td>
+                            <td data-label="تفاصيل إضافية"><button class="btn outline-btn" onclick="viewStudentDetails('${student.id}')"><i class="fas fa-eye"></i> عرض</button></td>
+                        `;
+                        studentsTableBody.appendChild(tr);
+                    });
+                }
+
+                renderTeacherVideos(); // Ensure videos are rendered when managing videos section is active
+                loadPlatformSettings(); // Load settings when teacher dashboard is updated
+            }
+        }
+
+        function showTeacherSection(sectionId) {
+            document.querySelectorAll('#teacher-dashboard .dashboard-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+
+            document.querySelectorAll('#teacher-dashboard .sidebar-nav ul li a').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`#teacher-dashboard .sidebar-nav ul li a[onclick*="showTeacherSection('${sectionId}')"]`).classList.add('active');
+            
+            // Re-render data for specific sections when they become active
+            if (sectionId === 'manage-videos') {
+                renderTeacherVideos();
+            } else if (sectionId === 'student-stats' || sectionId === 'student-list') {
+                updateTeacherDashboard(); // Re-render stats and student list
+            } else if (sectionId === 'platform-settings') {
+                loadPlatformSettings();
+            }
+        }
+
+        document.getElementById('upload-video-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearFormMessages();
+            const title = document.getElementById('video-title').value.trim();
+            const description = document.getElementById('video-description').value.trim();
+            const thumbnailFile = document.getElementById('video-thumbnail').files[0];
+            const videoFile = document.getElementById('video-file').files[0];
+            const targetGradeType = document.getElementById('video-target-grade-type').value;
+            const targetGrade = document.getElementById('video-target-grade').value;
+            const messageElementId = 'upload-video-message';
+            const uploadSpinner = document.getElementById('upload-spinner');
+
+            if (!title || !videoFile || !targetGradeType || !targetGrade) {
+                showMessage(messageElementId, 'الرجاء إدخال عنوان الفيديو وملف الفيديو والصف المستهدف.', false);
+                return;
+            }
+
+            // Basic file size validation (max 2GB simulated as 200MB for testing purposes, adjust as needed)
+            const MAX_FILE_SIZE = 200 * 1024 * 1024; // 200 MB
+            if (videoFile.size > MAX_FILE_SIZE) {
+                showMessage(messageElementId, 'حجم ملف الفيديو كبير جداً. الحد الأقصى 200 ميجابايت للتجربة.', false);
+                return;
+            }
+
+            // Simulate upload progress
+            uploadSpinner.style.display = 'block';
+            showMessage(messageElementId, 'جاري رفع الفيديو، قد يستغرق الأمر بعض الوقت...', true);
+
+            setTimeout(() => {
+                // In a real application:
+                // 1. Upload videoFile to a secure storage (e.g., AWS S3, Google Cloud Storage).
+                //    This would return a secure, temporary, non-shareable URL or identifier.
+                // 2. Upload thumbnailFile if exists.
+                // 3. Save video metadata (title, description, secure_video_url, target_grade) to database.
+
+                // Simulate video storage and ID generation for frontend demo
+                const videoId = Date.now().toString();
+                const videoUrl = URL.createObjectURL(videoFile); // Create a temporary URL for demonstration
+                const thumbnailUrl = thumbnailFile ? URL.createObjectURL(thumbnailFile) : 'https://via.placeholder.com/320x200/ADD8E6/FFFFFF?text=Video+Thumbnail';
+
+                const newVideo = {
+                    id: videoId,
+                    title: title,
+                    description: description,
+                    thumbnail: thumbnailUrl,
+                    videoUrl: videoUrl, // This URL is temporary, replace with secure backend URL
+                    targetGradeType: targetGradeType,
+                    targetGrade: targetGrade,
+                    uploadDate: new Date().toLocaleDateString('ar-EG'),
+                    views: 0 // Initial views
+                };
+
+                videos.push(newVideo);
+                saveData();
+                uploadSpinner.style.display = 'none';
+                showMessage(messageElementId, 'تم رفع الفيديو بنجاح!', true);
+                document.getElementById('upload-video-form').reset(); // Clear form
+                renderTeacherVideos(); // Update the video list
+                updateTeacherDashboard(); // Update total video count
+            }, 2000); // Simulate network delay
+        });
+
+        function renderTeacherVideos() {
+            const teacherVideoList = document.getElementById('teacher-video-list');
+            teacherVideoList.innerHTML = ''; // Clear previous videos
+
+            if (videos.length === 0) {
+                teacherVideoList.innerHTML = `
+                    <div class="no-content">
+                        <p><i class="fas fa-exclamation-circle"></i> لا توجد فيديوهات مرفوعة حتى الآن.</p>
+                        <button class="btn primary-btn" onclick="showTeacherSection('upload-video')"><i class="fas fa-plus-circle"></i> ابدأ برفع فيديو جديد</button>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort videos by upload date (most recent first)
+            const sortedVideos = [...videos].sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+
+            sortedVideos.forEach(video => {
+                const videoCard = document.createElement('div');
+                videoCard.classList.add('video-card');
+                videoCard.innerHTML = `
+                    <img src="${video.thumbnail}" alt="${video.title}">
+                    <div class="video-card-info">
+                        <h3>${video.title}</h3>
+                        <p>${video.description}</p>
+                        <div class="video-meta">
+                            <span><i class="fas fa-calendar-alt"></i> ${video.uploadDate}</span>
+                            <span><i class="fas fa-eye"></i> ${video.views} مشاهدة</span>
+                        </div>
+                        <div class="video-meta">
+                            <span><i class="fas fa-tag"></i> ${video.targetGrade} (${video.targetGradeType})</span>
+                        </div>
+                        <div class="video-actions">
+                            <button class="btn primary-btn" onclick="openVideoPlayer('${video.id}', false)"><i class="fas fa-play"></i> مشاهدة</button>
+                            <button class="btn secondary-btn" onclick="editVideo('${video.id}')"><i class="fas fa-edit"></i> تعديل</button>
+                            <button class="btn outline-btn" onclick="deleteVideo('${video.id}')"><i class="fas fa-trash-alt"></i> حذف</button>
+                        </div>
+                    </div>
+                `;
+                teacherVideoList.appendChild(videoCard);
+            });
+        }
+
+        function editVideo(videoId) {
+            alert('وظيفة التعديل غير مفعلة في هذه النسخة التجريبية. (تعديل الفيديو ' + videoId + ')');
+            // In a real application, this would load a form with video details for editing
+        }
+
+        function deleteVideo(videoId) {
+            if (confirm('هل أنت متأكد من حذف هذا الفيديو؟ هذا الإجراء لا يمكن التراجع عنه.')) {
+                videos = videos.filter(v => v.id !== videoId);
+                // Also remove video from all student watch histories
+                for (const studentId in studentWatchHistory) {
+                    studentWatchHistory[studentId] = studentWatchHistory[studentId].filter(item => item.videoId !== videoId);
+                }
+                saveData();
+                renderTeacherVideos();
+                updateTeacherDashboard(); // Update total video count
+            }
+        }
+
+        function viewStudentDetails(studentId) {
+            const student = students.find(s => s.id === studentId);
+            if (student) {
+                let details = `
+                    الاسم: ${student.name}
+                    رقم الهاتف: ${student.phone}
+                    الصف: ${student.grade} (${student.gradeType})
+                    مرات تسجيل الدخول: ${student.loginCount}
+                    تاريخ التسجيل: ${student.registrationDate}
+                `;
+                const studentWatched = studentWatchHistory[student.id] || [];
+                if (studentWatched.length > 0) {
+                    details += '\n\nالفيديوهات المشاهدة:';
+                    studentWatched.forEach(item => {
+                        details += `\n- ${item.title} (شوهد في: ${item.watchedAt})`;
+                    });
+                } else {
+                    details += '\n\nلم يشاهد الطالب أي فيديوهات بعد.';
+                }
+
+                alert('تفاصيل الطالب:\n\n' + details);
+            }
+        }
+
+        // Platform Settings Logic
+        document.getElementById('platform-settings-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearFormMessages();
+
+            const welcomeMessage = document.getElementById('welcome-message').value.trim();
+            const contactEmail = document.getElementById('contact-email').value.trim();
+            const contactPhone = document.getElementById('contact-phone').value.trim();
+            const securityLevel = document.getElementById('security-level').value;
+            const messageElementId = 'settings-message';
+
+            if (!welcomeMessage || !contactEmail || !contactPhone || !securityLevel) {
+                showMessage(messageElementId, 'الرجاء ملء جميع حقول الإعدادات.', false);
+                return;
+            }
+
+            // Basic email validation
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
+                showMessage(messageElementId, 'الرجاء إدخال بريد إلكتروني صحيح.', false);
+                return;
+            }
+            // Basic phone validation (Egyptian format example)
+            if (!/^(01)[0-9]{9}$/.test(contactPhone)) {
+                showMessage(messageElementId, 'الرجاء إدخال رقم هاتف صحيح (يبدأ بـ 01 و11 رقمًا).', false);
+                return;
+            }
+
+            platformSettings = {
+                welcomeMessage,
+                contactEmail,
+                contactPhone,
+                securityLevel
+            };
+            saveData();
+            showMessage(messageElementId, 'تم حفظ الإعدادات بنجاح!', true);
+        });
+
+        function loadPlatformSettings() {
+            document.getElementById('welcome-message').value = platformSettings.welcomeMessage;
+            document.getElementById('contact-email').value = platformSettings.contactEmail;
+            document.getElementById('contact-phone').value = platformSettings.contactPhone;
+            document.getElementById('security-level').value = platformSettings.securityLevel;
+        }
+
+        function logoutTeacher() {
+            currentUser = null;
+            sessionStorage.removeItem('currentUser'); // Clear session
+            showScreen('auth-screen');
+            showAuthForm('teacher'); // Default back to teacher tab for convenience
+            document.getElementById('teacher-password').value = ''; // Clear password field
+            showMessage('teacher-form-message', 'تم تسجيل الخروج بنجاح.', true);
+        }
+
+        // --- Student Dashboard Logic ---
+        function updateStudentDashboard() {
+            if (currentUser && currentUser.type === 'student') {
+                const student = currentUser.data;
+                document.getElementById('student-dashboard-name').textContent = student.name;
+                document.getElementById('student-profile-name').textContent = student.name;
+                document.getElementById('student-profile-info').textContent = `${student.grade} - ${student.gradeType}`;
+                document.getElementById('student-sidebar-avatar').src = student.profilePic;
+
+
+                // Populate Edit Profile form
+                document.getElementById('edit-student-name').value = student.name;
+                document.getElementById('edit-student-phone').value = student.phone;
+                document.getElementById('edit-student-grade-type').value = student.gradeType;
+                document.getElementById('edit-student-grade').value = student.grade;
+                // profile pic input is a file input, so it won't display current image path
+
+                renderStudentVideos(student.grade, student.gradeType);
+                updateStudentProgress(student.id);
+            }
+        }
+
+        function showStudentSection(sectionId) {
+            document.querySelectorAll('#student-dashboard .dashboard-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+
+            document.querySelectorAll('#student-dashboard .sidebar-nav ul li a').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`#student-dashboard .sidebar-nav ul li a[onclick*="showStudentSection('${sectionId}')"]`).classList.add('active');
+
+            // Re-render progress or profile if section is active
+            if (sectionId === 'my-progress') {
+                updateStudentProgress(currentUser.data.id);
+            } else if (sectionId === 'my-profile') {
+                 updateStudentDashboard(); // Reload profile data
+            }
+        }
+
+        document.getElementById('edit-profile-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearFormMessages();
+            const student = currentUser.data;
+            const newName = document.getElementById('edit-student-name').value.trim();
+            const newProfilePicFile = document.getElementById('edit-student-profile-pic').files[0];
+            const messageElementId = 'edit-profile-message';
+
+            if (!newName) {
+                showMessage(messageElementId, 'الرجاء إدخال الاسم كاملاً.', false);
+                return;
+            }
+            const nameParts = newName.split(' ');
+            if (nameParts.length < 3) {
+                showMessage(messageElementId, 'الرجاء إدخال الاسم كاملاً (ثلاثي).', false);
+                return;
+            }
+
+            const updateProfile = (picUrl) => {
+                student.name = newName;
+                student.profilePic = picUrl; // Update picture
+                
+                // Update the student in the global students array
+                const studentIndex = students.findIndex(s => s.id === student.id);
+                if (studentIndex !== -1) {
+                    students[studentIndex] = student;
+                }
+
+                // Update current user session data
+                currentUser.data = student;
+
+                saveData();
+                showMessage(messageElementId, 'تم حفظ التغييرات بنجاح!', true);
+                updateStudentDashboard(); // Re-render dashboard with new info
+            };
+
+            if (newProfilePicFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    updateProfile(e.target.result);
+                };
+                reader.readAsDataURL(newProfilePicFile);
+            } else {
+                updateProfile(student.profilePic); // Use existing picture if no new one is uploaded
+            }
+        });
+
+
+        function renderStudentVideos(grade, gradeType) {
+            const studentVideoGrid = document.getElementById('student-video-grid');
+            studentVideoGrid.innerHTML = ''; // Clear previous videos
+
+            const filteredVideos = videos.filter(video =>
+                video.targetGrade === grade && video.targetGradeType === gradeType
+            );
+
+            if (filteredVideos.length === 0) {
+                studentVideoGrid.innerHTML = `
+                    <div class="no-content">
+                        <p><i class="fas fa-info-circle"></i> لا توجد فيديوهات متاحة لصفك حالياً.</p>
+                        <p>تأكد من اختيار الصف الصحيح عند تسجيل الدخول أو تواصل مع المستر.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort videos by upload date (most recent first) for students
+            const sortedVideos = [...filteredVideos].sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+
+            sortedVideos.forEach(video => {
+                const videoCard = document.createElement('div');
+                videoCard.classList.add('video-card');
+                // Pass true for isStudentView to enable view tracking
+                videoCard.setAttribute('onclick', `openVideoPlayer('${video.id}', true)`);  
+                videoCard.innerHTML = `
+                    <img src="${video.thumbnail}" alt="${video.title}">
+                    <div class="video-card-info">
+                        <h3>${video.title}</h3>
+                        <p>${video.description}</p>
+                        <div class="video-meta">
+                            <span><i class="fas fa-calendar-alt"></i> ${video.uploadDate}</span>
+                            <span><i class="fas fa-eye"></i> ${video.views} مشاهدة</span>
+                        </div>
+                    </div>
+                `;
+                studentVideoGrid.appendChild(videoCard);
+            });
+        }
+
+        function updateStudentProgress(studentId) {
+            const historyList = document.getElementById('student-watch-history');
+            historyList.innerHTML = '';
+            let totalEstimatedWatchTimeMinutes = 0;
+
+            const studentHistory = studentWatchHistory[studentId] || [];
+
+            if (studentHistory.length === 0) {
+                historyList.innerHTML = '<li><i class="fas fa-info-circle"></i> لا توجد سجلات مشاهدة حتى الآن.</li>';
+            } else {
+                // Sort history by most recent watched
+                const sortedHistory = [...studentHistory].sort((a, b) => new Date(b.watchedAt) - new Date(a.watchedAt));
+
+                sortedHistory.forEach(item => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<span><i class="fas fa-play-circle"></i> ${item.title}</span> <span class="watch-time">مشاهدة في ${item.watchedAt}</span>`;
+                    historyList.appendChild(li);
+                    totalEstimatedWatchTimeMinutes += 5; // Assuming average 5 mins per video for demo
+                });
+            }
+
+            document.getElementById('videos-watched-count').textContent = studentHistory.length;
+            document.getElementById('total-watch-time').textContent = `${totalEstimatedWatchTimeMinutes} دقيقة`;
+        }
+
+        function logoutStudent() {
+            currentUser = null;
+            sessionStorage.removeItem('currentUser'); // Clear session
+            showScreen('auth-screen');
+            showAuthForm('student'); // Default to student tab
+            document.getElementById('student-name').value = ''; // Clear fields
+            document.getElementById('student-phone').value = '';
+            document.getElementById('student-profile-pic-upload').value = ''; // Clear file input
+            document.getElementById('student-grade-type').value = '';
+            document.getElementById('student-grade').value = '';
+            showMessage('student-form-message', 'تم تسجيل الخروج بنجاح.', true);
+        }
+
+        // --- Video Player Modal Logic ---
+        const videoModal = document.getElementById('video-modal');
+        const videoPlayer = document.getElementById('player');
+        const videoSource = document.getElementById('video-source');
+        const modalVideoTitle = document.getElementById('modal-video-title');
+        const modalVideoDescription = document.getElementById('modal-video-description');
+        const modalViewCount = document.getElementById('modal-view-count');
+
+        function applyVideoSecuritySettings() {
+            const level = platformSettings.securityLevel;
+            videoPlayer.controlsList = 'nodownload'; // Always disable download
+
+            if (level === 'متوسط') {
+                // Disable fullscreen button (browser-specific and not fully reliable via controlsList)
+                videoPlayer.controlsList += ' nofullscreen';
+                // Attempt to prevent right-click
+                videoPlayer.oncontextmenu = () => false;
+            } else if (level === 'عالي') {
+                // Disable everything possible
+                videoPlayer.controlsList += ' nofullscreen noplaybackrate';
+                videoPlayer.oncontextmenu = () => false;
+                videoPlayer.disablePictureInPicture = true;
+                // Add a listener to try to prevent common screenshot shortcuts (limited effectiveness)
+                document.addEventListener('keydown', handleScreenshotKeys);
+            } else { // 'عادي'
+                videoPlayer.controlsList = 'nodownload'; // Only disable download
+                videoPlayer.oncontextmenu = null; // Re-enable right-click
+                videoPlayer.disablePictureInPicture = false;
+                document.removeEventListener('keydown', handleScreenshotKeys);
+            }
+        }
+
+        function handleScreenshotKeys(event) {
+            // Attempt to block common screenshot keys, note this is not foolproof
+            const forbiddenKeys = ['PrintScreen', 'Meta', 'Alt']; // Windows PrintScreen, Mac Command, Alt
+            if (forbiddenKeys.includes(event.key) || (event.ctrlKey && event.shiftKey && event.key === 's') || (event.ctrlKey && event.key === 'p')) {
+                event.preventDefault();
+                alert("تم تعطيل لقطات الشاشة لحماية المحتوى.");
+            }
+        }
+
+
+        function openVideoPlayer(videoId, isStudentView = false) {
+            const video = videos.find(v => v.id === videoId);
+            if (video) {
+                videoSource.src = video.videoUrl;
+                videoPlayer.load(); // Load the new video source
+                modalVideoTitle.textContent = video.title;
+                modalVideoDescription.textContent = video.description;
+                modalViewCount.textContent = video.views;
+
+                // Apply security settings based on current platform settings
+                applyVideoSecuritySettings();
+
+                videoModal.style.display = 'flex';
+                videoPlayer.play();
+
+                if (isStudentView && currentUser && currentUser.type === 'student') {
+                    const studentId = currentUser.data.id;
+                    if (!studentWatchHistory[studentId]) {
+                        studentWatchHistory[studentId] = [];
+                    }
+                    // Check if student already watched this video
+                    const alreadyWatched = studentWatchHistory[studentId].some(item => item.videoId === videoId);
+                    if (!alreadyWatched) {
+                        video.views++; // Increment view count (this is simulated, backend needed for real counts)
+                        modalViewCount.textContent = video.views; // Update displayed count
+                        studentWatchHistory[studentId].push({
+                            videoId: video.id,
+                            title: video.title,
+                            watchedAt: new Date().toLocaleString('ar-EG', { dateStyle: 'medium', timeStyle: 'short' })
+                        });
+                        saveData(); // Save updated views and history
+                        updateStudentProgress(studentId); // Update student's progress view
+                    }
+                }
+            } else {
+                alert('عفواً، الفيديو غير موجود أو لا يمكن الوصول إليه.');
+            }
+        }
+
+        function closeVideoModal() {
+            videoPlayer.pause();
+            videoModal.style.display = 'none';
+            videoSource.src = ''; // Clear source to prevent background playing
+            document.removeEventListener('keydown', handleScreenshotKeys); // Remove event listener when modal closes
+            // Re-render the student videos grid to update view counts on cards if student is active
+            if (currentUser && currentUser.type === 'student') {
+                renderStudentVideos(currentUser.data.grade, currentUser.data.gradeType);
+            } else if (currentUser && currentUser.type === 'teacher') {
+                renderTeacherVideos();
+            }
+        }
+
+        // Close modal if clicked outside
+        window.onclick = function(event) {
+            if (event.target === videoModal) {
+                closeVideoModal();
+            }
+        }
+
+        // Initial setup on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if user was already logged in
+            if (currentUser) {
+                if (currentUser.type === 'teacher') {
+                    updateTeacherDashboard();
+                    showScreen('teacher-dashboard');
+                } else if (currentUser.type === 'student') {
+                    updateStudentDashboard();
+                    showScreen('student-dashboard');
+                }
+            } else {
+                showScreen('landing-page'); // Default to landing page
+                showAuthForm('student'); // Default to student tab on auth screen
+            }
+        });
+
+
+
+
+
+// تهيئة Firebase
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.appspot.com",
+  appId: "YOUR_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+
+// تعديل دالة رفع الفيديو
+document.getElementById('upload-video-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const videoFile = document.getElementById('video-file').files[0];
+  const storageRef = firebase.storage().ref(`videos/${videoFile.name}`);
+  const uploadTask = storageRef.put(videoFile);
+
+  uploadTask.on('state_changed', 
+    (snapshot) => {
+      // عرض تقدم الرفع
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log(`Upload is ${progress}% done`);
+    },
+    (error) => {
+      showMessage('upload-video-message', 'فشل في رفع الفيديو: ' + error.message, false);
+    },
+    () => {
+      uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+        const newVideo = {
+          id: Date.now().toString(),
+          title: document.getElementById('video-title').value,
+          videoUrl: downloadURL, // الرابط الدائم من Firebase
+          // ... باقي البيانات
+        };
+        videos.push(newVideo);
+        saveData();
+        showMessage('upload-video-message', 'تم رفع الفيديو بنجاح!', true);
+      });
+    }
+  );
+});
+    </script>
+</body>
+</html>
