@@ -2173,7 +2173,7 @@
 
                 <div class="dashboard-section" id="manage-videos">
                     <h2>إدارة الفيديوهات</h2>
-                    <p class="section-description">يمكنك عرض، تعديل، أو حذف الفيديوهات المرفوعة والتحقق من تفاصيل كل فيديو.</p>
+                    <p class="section-description">يمكنك عرض، أو حذف الفيديوهات المرفوعة والتحقق من تفاصيل كل فيديو.</p>
                     <div class="video-list" id="teacher-video-list">
                         <div class="no-content">
                             <p><i class="fas fa-exclamation-circle"></i> لا توجد فيديوهات مرفوعة حتى الآن.</p>
@@ -2235,7 +2235,7 @@
 
                 <div class="dashboard-section" id="manage-quizzes">
                     <h2>إدارة الاختبارات</h2>
-                    <p class="section-description">عرض، تعديل، أو حذف الاختبارات التي أنشأتها.</p>
+                    <p class="section-description">عرض، أو حذف الاختبارات التي أنشأتها.</p>
                     <div id="quizzes-list">
                         <div class="no-content">
                             <p><i class="fas fa-exclamation-circle"></i> لا توجد اختبارات متاحة حتى الآن.</p>
@@ -2473,6 +2473,9 @@
             contactPhone: "010XXXXXXXXX",
             securityLevel: "عادي"
         };
+        
+        // **NEW: Timestamp for content updates for students**
+        let lastTeacherActionTime = parseInt(localStorage.getItem('lastTeacherActionTime')) || 0;
 
 
         // Save data to localStorage (simulated persistence)
@@ -2485,6 +2488,7 @@
             localStorage.setItem('studentQuizResults', JSON.stringify(studentQuizResults)); // Save quiz results
             localStorage.setItem('platformSettings', JSON.stringify(platformSettings));
             sessionStorage.setItem('currentUser', JSON.stringify(currentUser)); // Persist current user session
+            localStorage.setItem('lastTeacherActionTime', lastTeacherActionTime); // Save the timestamp
         }
 
         // --- UI Helper Functions ---
@@ -2795,6 +2799,7 @@
                 };
 
                 videos.push(newVideo);
+                lastTeacherActionTime = Date.now(); // Update timestamp on add
                 saveData();
                 uploadSpinner.style.display = 'none';
                 showMessage(messageElementId, 'تم إضافة الفيديو بنجاح!', true);
@@ -2844,7 +2849,6 @@
                         </div>
                         <div class="video-actions">
                             <button class="btn primary-btn" onclick="openVideoPlayer('${video.id}', false)"><i class="fas fa-play"></i> مشاهدة</button>
-                            <button class="btn secondary-btn" onclick="editVideo('${video.id}')"><i class="fas fa-edit"></i> تعديل</button>
                             <button class="btn outline-btn" onclick="deleteVideo('${video.id}')"><i class="fas fa-trash-alt"></i> حذف</button>
                         </div>
                     </div>
@@ -2853,10 +2857,7 @@
             });
         }
 
-        function editVideo(videoId) {
-            alert('وظيفة التعديل غير مفعلة في هذه النسخة التجريبية. (تعديل الفيديو ' + videoId + ')');
-            // In a real application, this would load a form with video details for editing
-        }
+        // Removed editVideo function completely
 
         function deleteVideo(videoId) {
             if (confirm('هل أنت متأكد من حذف هذا الفيديو؟ هذا الإجراء لا يمكن التراجع عنه.')) {
@@ -2865,6 +2866,7 @@
                 for (const studentId in studentWatchHistory) {
                     studentWatchHistory[studentId] = studentWatchHistory[studentId].filter(item => item.videoId !== videoId);
                 }
+                lastTeacherActionTime = Date.now(); // Update timestamp on delete
                 saveData();
                 renderTeacherVideos();
                 updateTeacherDashboard(); // Update total video count
@@ -2939,6 +2941,7 @@
                 contactPhone,
                 securityLevel
             };
+            lastTeacherActionTime = Date.now(); // Update timestamp on settings change
             saveData();
             showMessage(messageElementId, 'تم حفظ الإعدادات بنجاح!', true);
         });
@@ -3055,6 +3058,7 @@
             const studentVideoGrid = document.getElementById('student-video-grid');
             studentVideoGrid.innerHTML = ''; // Clear previous videos
 
+            // Filter videos based on student's grade and type
             const filteredVideos = videos.filter(video =>
                 video.targetGrade === grade && video.targetGradeType === gradeType
             );
@@ -3171,7 +3175,7 @@
             }
             
             // Specific controls for YouTube iframes (using URL parameters)
-            if (playerElement.tagName === 'IFRAME' && playerElement.src.includes('youtube.com/embed')) {
+            if (playerElement.tagName === 'IFRAME' && (playerElement.src.includes('youtube.com') || playerElement.src.includes('youtu.be'))) {
                 // For YouTube, share button and logo are usually controlled by URL params:
                 // rel=0 (hide related videos at end), modestbranding=1 (hide YouTube logo), showinfo=0 (hide video title/uploader)
                 // We've added these in the upload logic already.
@@ -3207,7 +3211,7 @@
 
                 let playerElement;
 
-                if (video.videoUrl.includes('youtube.com/embed')) {
+                if (video.videoUrl.includes('youtube.com') || video.videoUrl.includes('youtu.be')) {
                     playerElement = document.createElement('iframe');
                     playerElement.setAttribute('src', video.videoUrl);
                     playerElement.setAttribute('frameborder', '0');
@@ -3261,6 +3265,7 @@
             videoModal.style.display = 'none';
             document.removeEventListener('keydown', handleScreenshotKeys); // Remove event listener when modal closes
             
+            // **NEW: Re-render student videos after closing modal if student is logged in**
             if (currentUser && currentUser.type === 'student') {
                 renderStudentVideos(currentUser.data.grade, currentUser.data.gradeType);
             } else if (currentUser && currentUser.type === 'teacher') {
@@ -3354,6 +3359,7 @@
             };
 
             quizzes.push(newQuiz);
+            lastTeacherActionTime = Date.now(); // Update timestamp on quiz add
             saveData();
             showMessage(messageElementId, 'تم حفظ الاختبار بنجاح!', true);
             document.getElementById('create-quiz-form').reset();
@@ -3395,7 +3401,6 @@
                     <p>تاريخ الإنشاء: ${quiz.creationDate}</p>
                     <div class="btn-group">
                         <button class="btn primary-btn" onclick="viewQuizDetailsTeacher('${quiz.id}')"><i class="fas fa-eye"></i> عرض التفاصيل</button>
-                        <button class="btn secondary-btn" onclick="editQuiz('${quiz.id}')"><i class="fas fa-edit"></i> تعديل</button>
                         <button class="btn outline-btn" onclick="deleteQuiz('${quiz.id}')"><i class="fas fa-trash-alt"></i> حذف</button>
                     </div>
                 `;
@@ -3417,9 +3422,7 @@
             }
         }
 
-        function editQuiz(quizId) {
-            alert('وظيفة تعديل الاختبار غير مفعلة في هذه النسخة التجريبية. (تعديل الاختبار ' + quizId + ')');
-        }
+        // Removed editQuiz function completely
 
         function deleteQuiz(quizId) {
             if (confirm('هل أنت متأكد من حذف هذا الاختبار؟ هذا الإجراء لا يمكن التراجع عنه.')) {
@@ -3428,6 +3431,7 @@
                 for (const studentId in studentQuizResults) {
                     delete studentQuizResults[studentId][quizId];
                 }
+                lastTeacherActionTime = Date.now(); // Update timestamp on quiz delete
                 saveData();
                 renderManageQuizzes();
                 updateTeacherDashboard();
@@ -3703,6 +3707,39 @@
             resultDiv.appendChild(backToQuizzesBtn);
         }
 
+        // **NEW: Function to check for updates and refresh student content**
+        function checkForUpdates() {
+            // Only check for updates if a student is logged in
+            if (currentUser && currentUser.type === 'student') {
+                // This is a simplified "live update" mechanism.
+                // In a real application, you'd use WebSockets or long polling
+                // to push updates from the server, rather than polling localStorage.
+                const storedLastTeacherActionTime = parseInt(localStorage.getItem('lastTeacherActionTime')) || 0;
+
+                if (storedLastTeacherActionTime > lastTeacherActionTime) {
+                    lastTeacherActionTime = storedLastTeacherActionTime; // Update local timestamp
+                    // Re-load data from localStorage
+                    videos = JSON.parse(localStorage.getItem('videos')) || [];
+                    quizzes = JSON.parse(localStorage.getItem('quizzes')) || [];
+
+                    // Re-render relevant sections for the student
+                    if (document.getElementById('my-videos').classList.contains('active')) {
+                        renderStudentVideos(currentUser.data.grade, currentUser.data.gradeType);
+                        showMessage('student-form-message', 'تم تحديث قائمة الفيديوهات.', true);
+                    }
+                    if (document.getElementById('my-quizzes').classList.contains('active')) {
+                        renderStudentQuizzes(currentUser.data.grade, currentUser.data.gradeType);
+                        showMessage('student-form-message', 'تم تحديث قائمة الاختبارات.', true);
+                    }
+                }
+            }
+        }
+
+        // **NEW: Set up a periodic check for updates for students**
+        // In a real app, this interval might be longer or triggered by server pushes.
+        setInterval(checkForUpdates, 5000); // Check every 5 seconds
+
+
         // Initial setup on page load
         document.addEventListener('DOMContentLoaded', () => {
             // Add initial question to quiz creation form
@@ -3717,6 +3754,7 @@
                 } else if (currentUser.type === 'student') {
                     updateStudentDashboard();
                     showScreen('student-dashboard');
+                    checkForUpdates(); // Initial check on student login
                 }
             } else {
                 showScreen('landing-page'); // Default to landing page
@@ -3743,236 +3781,6 @@
             e.preventDefault();
         });
 
-
-
-
-
-
-
-
-         // --- تعديلات على وظيفة renderTeacherVideos ---
-        function renderTeacherVideos() {
-            const teacherVideoList = document.getElementById('teacher-video-list');
-            teacherVideoList.innerHTML = ''; // مسح الفيديوهات السابقة
-
-            if (videos.length === 0) {
-                teacherVideoList.innerHTML = `
-                    <div class="no-content">
-                        <p><i class="fas fa-exclamation-circle"></i> لا توجد فيديوهات مرفوعة حتى الآن.</p>
-                        <button class="btn primary-btn" onclick="showTeacherSection('upload-video')"><i class="fas fa-plus-circle"></i> ابدأ برفع فيديو جديد</button>
-                    </div>
-                `;
-                return;
-            }
-
-            // ترتيب الفيديوهات من الأحدث إلى الأقدم
-            const sortedVideos = [...videos].sort((a, b) => {
-                const dateA = new Date(a.uploadDate.split('/').reverse().join('-'));
-                const dateB = new Date(b.uploadDate.split('/').reverse().join('-'));
-                return dateB - dateA;
-            });
-
-            sortedVideos.forEach(video => {
-                const videoCard = document.createElement('div');
-                videoCard.classList.add('video-card');
-                videoCard.innerHTML = `
-                    <img src="${video.thumbnail}" alt="${video.title}">
-                    <div class="video-card-info">
-                        <h3>${video.title}</h3>
-                        <p>${video.description}</p>
-                        <div class="video-meta">
-                            <span><i class="fas fa-calendar-alt"></i> ${video.uploadDate}</span>
-                            <span><i class="fas fa-eye"></i> ${video.views} مشاهدة</span>
-                        </div>
-                        <div class="video-meta">
-                            <span><i class="fas fa-tag"></i> ${video.targetGrade} (${video.targetGradeType})</span>
-                        </div>
-                        <div class="video-actions">
-                            <button class="btn primary-btn" onclick="openVideoPlayer('${video.id}', false)"><i class="fas fa-play"></i> مشاهدة</button>
-                            <button class="btn outline-btn" onclick="deleteVideo('${video.id}')"><i class="fas fa-trash-alt"></i> حذف</button>
-                        </div>
-                    </div>
-                `;
-                teacherVideoList.appendChild(videoCard);
-            });
-        }
-
-        // --- تعديلات على وظيفة renderManageQuizzes ---
-        function renderManageQuizzes() {
-            const quizzesListDiv = document.getElementById('quizzes-list');
-            quizzesListDiv.innerHTML = '';
-
-            if (quizzes.length === 0) {
-                quizzesListDiv.innerHTML = `
-                    <div class="no-content">
-                        <p><i class="fas fa-exclamation-circle"></i> لا توجد اختبارات متاحة حتى الآن.</p>
-                        <button class="btn primary-btn" onclick="showTeacherSection('create-quiz')"><i class="fas fa-plus-circle"></i> إنشاء اختبار جديد</button>
-                    </div>
-                `;
-                return;
-            }
-
-            const sortedQuizzes = [...quizzes].sort((a, b) => {
-                const dateA = new Date(a.creationDate.split('/').reverse().join('-'));
-                const dateB = new Date(b.creationDate.split('/').reverse().join('-'));
-                return dateB - dateA;
-            });
-
-            sortedQuizzes.forEach(quiz => {
-                const quizCard = document.createElement('div');
-                quizCard.classList.add('quiz-card');
-                quizCard.innerHTML = `
-                    <h3>${quiz.title}</h3>
-                    <p>المدة: ${quiz.duration} دقيقة</p>
-                    <p>الأسئلة: ${quiz.questions.length}</p>
-                    <p>الصف المستهدف: ${quiz.targetGrade} (${quiz.targetGradeType})</p>
-                    <p>تاريخ الإنشاء: ${quiz.creationDate}</p>
-                    <div class="btn-group">
-                        <button class="btn primary-btn" onclick="viewQuizDetailsTeacher('${quiz.id}')"><i class="fas fa-eye"></i> عرض التفاصيل</button>
-                        <button class="btn outline-btn" onclick="deleteQuiz('${quiz.id}')"><i class="fas fa-trash-alt"></i> حذف</button>
-                    </div>
-                `;
-                quizzesListDiv.appendChild(quizCard);
-            });
-        }
-
-        // --- تعديلات على وظيفة deleteVideo لجعل التغييرات فورية ---
-        function deleteVideo(videoId) {
-            if (confirm('هل أنت متأكد من حذف هذا الفيديو؟ هذا الإجراء لا يمكن التراجع عنه.')) {
-                videos = videos.filter(v => v.id !== videoId);
-                
-                // إزالة الفيديو من سجل المشاهدة لجميع الطلاب
-                for (const studentId in studentWatchHistory) {
-                    studentWatchHistory[studentId] = studentWatchHistory[studentId].filter(item => item.videoId !== videoId);
-                }
-                
-                saveData();
-                
-                // تحديث واجهة المعلم
-                renderTeacherVideos();
-                updateTeacherDashboard();
-                
-                // إذا كان هناك طالب متصل حالياً، سيتم تحديث واجهته تلقائياً عند محاولة عرض الفيديوهات
-                if (currentUser && currentUser.type === 'student') {
-                    renderStudentVideos(currentUser.data.grade, currentUser.data.gradeType);
-                    alert('تم حذف أحد الفيديوهات من قائمتك الدراسية.');
-                }
-            }
-        }
-
-        // --- تعديلات على وظيفة deleteQuiz لجعل التغييرات فورية ---
-        function deleteQuiz(quizId) {
-            if (confirm('هل أنت متأكد من حذف هذا الاختبار؟ هذا الإجراء لا يمكن التراجع عنه.')) {
-                quizzes = quizzes.filter(q => q.id !== quizId);
-                
-                // إزالة نتائج هذا الاختبار من جميع الطلاب
-                for (const studentId in studentQuizResults) {
-                    delete studentQuizResults[studentId][quizId];
-                }
-                
-                saveData();
-                
-                // تحديث واجهة المعلم
-                renderManageQuizzes();
-                updateTeacherDashboard();
-                
-                // إذا كان هناك طالب متصل حالياً، سيتم تحديث واجهته تلقائياً عند محاولة عرض الاختبارات
-                if (currentUser && currentUser.type === 'student') {
-                    renderStudentQuizzes(currentUser.data.grade, currentUser.data.gradeType);
-                    alert('تم حذف أحد الاختبارات من قائمتك الدراسية.');
-                }
-            }
-        }
-
-        // --- إضافة وظيفة جديدة لتحديث المحتوى للطلاب عند إضافة فيديو جديد ---
-        document.getElementById('upload-video-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            clearFormMessages();
-            
-            const title = document.getElementById('video-title').value.trim();
-            const description = document.getElementById('video-description').value.trim();
-            const videoUrlInput = document.getElementById('video-url').value.trim();
-            const targetGradeType = document.getElementById('video-target-grade-type').value;
-            const targetGrade = document.getElementById('video-target-grade').value;
-            const messageElementId = 'upload-video-message';
-            const uploadSpinner = document.getElementById('upload-spinner');
-
-            if (!title || !videoUrlInput || !targetGradeType || !targetGrade) {
-                showMessage(messageElementId, 'الرجاء إدخال عنوان الفيديو ورابط الفيديو والصف المستهدف.', false);
-                return;
-            }
-
-            uploadSpinner.style.display = 'block';
-            showMessage(messageElementId, 'جاري معالجة الفيديو...', true);
-
-            let thumbnailUrl = 'https://via.placeholder.com/320x200/ADD8E6/FFFFFF?text=Video+Thumbnail';
-            let processedVideoUrl = videoUrlInput;
-
-            // معالجة رابط اليوتيوب
-            if (videoUrlInput.includes('youtube.com') || videoUrlInput.includes('youtu.be')) {
-                let videoId = '';
-                const youtubeRegex = /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-                const match = videoUrlInput.match(youtubeRegex);
-                if (match && match[1]) {
-                    videoId = match[1];
-                    thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-                    processedVideoUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&showinfo=0&rel=0&modestbranding=1&enablejsapi=1`;
-                } else {
-                    showMessage(messageElementId, 'رابط يوتيوب غير صالح.', false);
-                    uploadSpinner.style.display = 'none';
-                    return;
-                }
-            } else if (videoUrlInput.includes('drive.google.com')) {
-                const driveRegex = /file\/d\/([a-zA-Z0-9_-]+)(?:\/view)?/;
-                const match = videoUrlInput.match(driveRegex);
-                if (match && match[1]) {
-                    const fileId = match[1];
-                    processedVideoUrl = `https://docs.google.com/file/d/${fileId}/preview`;
-                } else {
-                    showMessage(messageElementId, 'رابط جوجل درايف غير صالح. تأكد من أنه رابط ملف مباشر أو معاينة.', false);
-                    uploadSpinner.style.display = 'none';
-                    return;
-                }
-            } else {
-                showMessage(messageElementId, 'الرجاء إدخال رابط يوتيوب أو جوجل درايف. ستظهر الصورة المصغرة الافتراضية للفيديوهات الأخرى.', true);
-            }
-
-            document.getElementById('video-thumbnail-url').value = thumbnailUrl;
-
-            // حفظ الفيديو الجديد
-            setTimeout(() => {
-                const videoId = Date.now().toString();
-
-                const newVideo = {
-                    id: videoId,
-                    title: title,
-                    description: description,
-                    thumbnail: thumbnailUrl,
-                    videoUrl: processedVideoUrl,
-                    originalUrl: videoUrlInput,
-                    targetGradeType: targetGradeType,
-                    targetGrade: targetGrade,
-                    uploadDate: new Date().toLocaleDateString('ar-EG'),
-                    views: 0
-                };
-
-                videos.push(newVideo);
-                saveData();
-                uploadSpinner.style.display = 'none';
-                showMessage(messageElementId, 'تم إضافة الفيديو بنجاح!', true);
-                document.getElementById('upload-video-form').reset();
-                renderTeacherVideos();
-                updateTeacherDashboard();
-
-                // إعلام الطلاب المتصلين حالياً بوجود فيديو جديد
-                if (currentUser && currentUser.type === 'student' && 
-                    newVideo.targetGrade === currentUser.data.grade && 
-                    newVideo.targetGradeType === currentUser.data.gradeType) {
-                    renderStudentVideos(currentUser.data.grade, currentUser.data.gradeType);
-                    alert('تم إضافة فيديو جديد إلى قائمتك الدراسية!');
-                }
-            }, 1500);
-        });
 
     </script>
 </body>
