@@ -4011,50 +4011,7 @@ function convertToEmbedURL(url) {
   return url.replace("watch?v=", "embed/");
 }
 
-    </script>
-
-
-
-
-
- <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
-  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyAJ60fFJ5ffT3qWaaGVkLyLsbf6wbvLz6A",
-    authDomain: "mr-ahmed-367c0.firebaseapp.com",
-    projectId: "mr-ahmed-367c0",
-    storageBucket: "mr-ahmed-367c0.appspot.com", // ✅ تم تصحيحه
-    messagingSenderId: "777392833387",
-    appId: "1:777392833387:web:a6452a633ed28dc31c422e",
-    measurementId: "G-VSZHGYSDGY"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-
-  // قاعدة البيانات
- 
-
-  // تأكيد التشغيل
-  if (app) {
-    console.log("✅ Firebase تم تهيئته بنجاح");
-  } else {
-    console.log("❌ حدث خطأ في تهيئة Firebase");
-  }
-
-
-  addDoc(collection(db, "videos"), {
-  title: "مثال",
-  url: "https://youtube.com/watch?v=abc123",
-  timestamp: new Date()
-});
-
-</script>
-
-
+   
 </script>
 </body>
 </html>
