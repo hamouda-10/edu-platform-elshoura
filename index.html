@@ -4012,34 +4012,49 @@ function convertToEmbedURL(url) {
 }
 
     </script>
-    <script type="module">
-  // Import the functions you need from the SDKs you need
+
+
+
+
+
+ <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
   const firebaseConfig = {
-    apiKey: "AIzaSyAuBPByiZvhZexSV8qT9ey24P8W3MIGsrk",
-    authDomain: "mr-ahmed-3f5ac.firebaseapp.com",
-    projectId: "mr-ahmed-3f5ac",
-    storageBucket: "mr-ahmed-3f5ac.firebasestorage.app",
-    messagingSenderId: "6020255947",
-    appId: "1:6020255947:web:867886f54421b983d8cb4e",
-    measurementId: "G-8PEF6H358W"
+    apiKey: "AIzaSyAJ60fFJ5ffT3qWaaGVkLyLsbf6wbvLz6A",
+    authDomain: "mr-ahmed-367c0.firebaseapp.com",
+    projectId: "mr-ahmed-367c0",
+    storageBucket: "mr-ahmed-367c0.appspot.com", // ✅ تم تصحيحه
+    messagingSenderId: "777392833387",
+    appId: "1:777392833387:web:a6452a633ed28dc31c422e",
+    measurementId: "G-VSZHGYSDGY"
   };
 
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
 
-  if(app){
-console.log("firebase init done");
-elsef
-console.log("firebase init error");
+  // قاعدة البيانات
+ 
+
+  // تأكيد التشغيل
+  if (app) {
+    console.log("✅ Firebase تم تهيئته بنجاح");
+  } else {
+    console.log("❌ حدث خطأ في تهيئة Firebase");
   }
+
+
+  addDoc(collection(db, "videos"), {
+  title: "مثال",
+  url: "https://youtube.com/watch?v=abc123",
+  timestamp: new Date()
+});
+
+</script>
+
+
 </script>
 </body>
 </html>
