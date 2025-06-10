@@ -2280,7 +2280,8 @@
         </div>
     </div>
 
-
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <script>
         // --- Global State Management (Simulated Backend Data) ---
         // In a real application, this data would come from a secure backend server and database.
@@ -3072,6 +3073,158 @@ document.getElementById('upload-video-form').addEventListener('submit', async fu
     }
   );
 });
+
+
+
+
+function applyVideoSecuritySettings() {
+    const level = platformSettings.securityLevel;
+    videoPlayer.controlsList = 'nodownload'; // Always disable download
+
+    if (level === 'متوسط') {
+        // Disable fullscreen button (browser-specific and not fully reliable via controlsList)
+        videoPlayer.controlsList += ' nofullscreen';
+        // Attempt to prevent right-click
+        videoPlayer.oncontextmenu = () => false;
+    } else if (level === 'عالي') {
+        // Disable everything possible
+        videoPlayer.controlsList += ' nofullscreen noplaybackrate';
+        videoPlayer.oncontextmenu = () => false;
+        videoPlayer.disablePictureInPicture = true;
+        // Add a listener to try to prevent common screenshot shortcuts (limited effectiveness)
+        document.addEventListener('keydown', handleScreenshotKeys);
+    } else { // 'عادي'
+        videoPlayer.controlsList = 'nodownload'; // Only disable download
+        videoPlayer.oncontextmenu = null; // Re-enable right-click
+        videoPlayer.disablePictureInPicture = false;
+        document.removeEventListener('keydown', handleScreenshotKeys);
+    }
+}
+
+function handleScreenshotKeys(event) {
+    // Attempt to block common screenshot keys, note this is not foolproof
+    const forbiddenKeys = ['PrintScreen', 'Meta', 'Alt']; // Windows PrintScreen, Mac Command, Alt
+    if (forbiddenKeys.includes(event.key) || (event.ctrlKey && event.shiftKey && event.key === 's') || (event.ctrlKey && event.key === 'p')) {
+        event.preventDefault();
+        alert("تم تعطيل لقطات الشاشة لحماية المحتوى.");
+    }
+}
+
+
+
+
+// Find your existing upload-video-form event listener
+document.getElementById('upload-video-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    clearFormMessages(); // Clear existing messages
+    
+    const title = document.getElementById('video-title').value.trim();
+    const description = document.getElementById('video-description').value.trim();
+    const thumbnailFile = document.getElementById('video-thumbnail').files[0];
+    const videoFile = document.getElementById('video-file').files[0];
+    const targetGradeType = document.getElementById('video-target-grade-type').value;
+    const targetGrade = document.getElementById('video-target-grade').value;
+    const messageElementId = 'upload-video-message';
+    const uploadSpinner = document.getElementById('upload-spinner');
+
+    if (!title || !videoFile || !targetGradeType || !targetGrade) {
+        showMessage(messageElementId, 'الرجاء إدخال عنوان الفيديو وملف الفيديو والصف المستهدف.', false);
+        return;
+    }
+
+    // Basic file size validation (Firebase Storage has its own limits, but good for UX)
+    const MAX_VIDEO_FILE_SIZE = 500 * 1024 * 1024; // Example: 500 MB limit, Firebase allows up to 5TB per object
+    if (videoFile.size > MAX_VIDEO_FILE_SIZE) {
+        showMessage(messageElementId, `حجم ملف الفيديو كبير جداً. الحد الأقصى ${MAX_VIDEO_FILE_SIZE / (1024 * 1024)} ميجابايت.`, false);
+        return;
+    }
+
+    uploadSpinner.style.display = 'block';
+    showMessage(messageElementId, 'جاري رفع الفيديو، قد يستغرق الأمر بعض الوقت...', true);
+
+    try {
+        // 1. Upload Video File to Firebase Storage
+        const videoStorageRef = firebase.storage().ref(`videos/${Date.now()}_${videoFile.name}`); // Unique name
+        const videoUploadTask = videoStorageRef.put(videoFile);
+
+        // Monitor upload progress (optional but good for UX)
+        videoUploadTask.on('state_changed', 
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                showMessage(messageElementId, `جاري رفع الفيديو: ${progress.toFixed(0)}%`, true);
+            },
+            (error) => {
+                throw new Error('فشل في رفع الفيديو: ' + error.message);
+            }
+        );
+
+        await videoUploadTask; // Wait for video upload to complete
+        const videoUrl = await videoStorageRef.getDownloadURL();
+
+        // 2. Upload Thumbnail File if exists
+        let thumbnailUrl = 'https://via.placeholder.com/320x200/ADD8E6/FFFFFF?text=Video+Thumbnail';
+        if (thumbnailFile) {
+            const thumbnailStorageRef = firebase.storage().ref(`thumbnails/${Date.now()}_${thumbnailFile.name}`); // Unique name
+            const thumbnailUploadTask = thumbnailStorageRef.put(thumbnailFile);
+            await thumbnailUploadTask; // Wait for thumbnail upload
+            thumbnailUrl = await thumbnailStorageRef.getDownloadURL();
+        }
+
+        // 3. Store video metadata with permanent URLs
+        const newVideo = {
+            id: Date.now().toString(),
+            title: title,
+            description: description,
+            thumbnail: thumbnailUrl,
+            videoUrl: videoUrl, // THIS IS THE PERMANENT URL
+            targetGradeType: targetGradeType,
+            targetGrade: targetGrade,
+            uploadDate: new Date().toLocaleDateString('ar-EG'),
+            views: 0
+        };
+
+        videos.push(newVideo);
+        saveData(); // Save to localStorage (or ideally, to a Firebase database like Firestore)
+        uploadSpinner.style.display = 'none';
+        showMessage(messageElementId, 'تم رفع الفيديو بنجاح!', true);
+        document.getElementById('upload-video-form').reset();
+        renderTeacherVideos();
+        updateTeacherDashboard();
+
+    } catch (error) {
+        uploadSpinner.style.display = 'none';
+        showMessage(messageElementId, error.message, false);
+        console.error("Upload error:", error);
+    }
+});
+
+
+
+function saveVideo(id) {
+  let saved = JSON.parse(localStorage.getItem("watchedVideos") || "[]");
+  if (!saved.includes(id)) {
+    saved.push(id);
+    localStorage.setItem("watchedVideos", JSON.stringify(saved));
+  }
+  displayVideo(id);
+}
+
+function displayVideo(id) {
+  const card = document.querySelector(`[data-id="${id}"]`);
+  const videoHTML = `
+    <video controls width="100%">
+      <source src="${id}.mp4" type="video/mp4">
+      متصفحك لا يدعم تشغيل الفيديو.
+    </video>
+  `;
+  card.innerHTML += videoHTML;
+}
+
+window.onload = function () {
+  let saved = JSON.parse(localStorage.getItem("watchedVideos") || "[]");
+  saved.forEach(id => displayVideo(id));
+};
+
     </script>
 </body>
 </html>
