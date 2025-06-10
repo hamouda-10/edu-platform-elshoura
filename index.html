@@ -6,9 +6,7 @@
     <title>منصة مستر أحمد الشورى التعليمية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-     <head>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <body oncontextmenu="return false;">
     <style>
         /* General Styles */
         :root {
@@ -24,8 +22,7 @@
             --shadow: rgba(0, 0, 0, 0.15);
             --hover-shadow: rgba(0, 0, 0, 0.25);
 
-
-                        --gold: #FFD700;
+            --gold: #FFD700;
             --gold-light: rgba(255, 215, 0, 0.7);
             --blue-dark: #001F3F;
             --blue-medium: #0668bd;
@@ -38,7 +35,6 @@
             --facebook-color: #1877F2;
             --instagram-color: #E4405F;
             --linkedin-color: #0A66C2;
-
         }
 
         * {
@@ -66,8 +62,6 @@
             color: var(--primary-color);
             transition: color 0.3s ease;
         }
-
-       
 
         /* Background Animation */
         .background-animation {
@@ -272,7 +266,6 @@
             left: 0;
             right: auto;
         }
-
 
         /* Hero Section (Landing Page) */
         .hero {
@@ -632,12 +625,10 @@
             border-color: #c3e6cb;
         }
 
-
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-
 
         /* Dashboard Layout (Teacher & Student) */
         .dashboard-content, .student-content {
@@ -761,7 +752,7 @@
         }
 
         /* Upload Video Form */
-        #upload-video-form, #edit-profile-form, #platform-settings-form {
+        #upload-video-form, #edit-profile-form, #platform-settings-form, #create-quiz-form, #manage-quizzes-section form {
             max-width: 750px;
             background-color: var(--bg-light);
             padding: 40px;
@@ -772,11 +763,11 @@
             margin-right: auto;
         }
 
-        #upload-video-form .form-group, #edit-profile-form .form-group, #platform-settings-form .form-group {
+        #upload-video-form .form-group, #edit-profile-form .form-group, #platform-settings-form .form-group, #create-quiz-form .form-group, #manage-quizzes-section .form-group {
             margin-bottom: 25px;
         }
 
-        #upload-video-form .btn, #edit-profile-form .btn, #platform-settings-form .btn {
+        #upload-video-form .btn, #edit-profile-form .btn, #platform-settings-form .btn, #create-quiz-form .btn, #manage-quizzes-section .btn {
             width: auto;
             margin-top: 15px;
         }
@@ -901,7 +892,6 @@
             font-size: 1.1em !important;
         }
 
-
         /* Stats Cards */
         .stats-cards {
             display: grid;
@@ -1017,7 +1007,6 @@
         .students-table thead th:first-child { border-top-right-radius: 10px; }
         .students-table thead th:last-child { border-top-left-radius: 10px; }
 
-
         .students-table tbody td {
             padding: 15px;
             border-bottom: 1px solid var(--border-color);
@@ -1102,7 +1091,6 @@
             color: #888;
         }
 
-
         /* Video Player Modal */
         .modal {
             display: none;
@@ -1170,7 +1158,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
-        .video-wrapper video {
+        .video-wrapper video, .video-wrapper iframe {
             position: absolute;
             top: 0;
             left: 0;
@@ -1183,6 +1171,20 @@
             -ms-user-select: none;
             user-select: none;
         }
+
+        /* اخفاء زر المشاركة لـ YouTube */
+        .video-wrapper iframe[src*="youtube.com"] {
+            /* يمكن التحكم في بعض عناصر واجهة المستخدم عبر معلمات URL، لكن إخفاء زر المشاركة قد يكون صعبًا */
+            /* لضبط المشغل أكثر، راجع وثائق YouTube IFrame Player API */
+        }
+        .video-wrapper iframe[src*="youtube.com"] .ytp-share-button { /* هذه ليست طريقة CSS موثوقة */
+            display: none !important;
+        }
+        /* إخفاء شعار YouTube بجانب زر الإعدادات */
+        .video-wrapper iframe[src*="youtube.com"] .ytp-chrome-top .ytp-youtube-button { /* هذه ليست طريقة CSS موثوقة */
+            display: none !important;
+        }
+
 
         .modal-video-description {
             font-size: 1.15em;
@@ -1220,6 +1222,128 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Quiz Specific Styles */
+        .quiz-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px var(--shadow);
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        .quiz-card h3 {
+            font-size: 1.8em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .quiz-card p {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .quiz-card .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .question-block {
+            background-color: var(--bg-light);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .question-block h4 {
+            font-size: 1.3em;
+            color: var(--dark-text);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .question-block label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background-color 0.2s ease;
+        }
+
+        .question-block label:hover {
+            background-color: rgba(0, 86, 179, 0.05);
+        }
+
+        .question-block input[type="radio"] {
+            margin-left: 10px;
+        }
+
+        .question-block .correct-answer {
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+        .question-block .wrong-answer {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .question-block .selected-answer {
+            background-color: rgba(0, 86, 179, 0.1);
+        }
+        .quiz-result {
+            margin-top: 30px;
+            padding: 25px;
+            background-color: #e9f7ef;
+            border: 1px solid #c3e6cb;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.5em;
+            color: #155724;
+            font-weight: 700;
+        }
+        .quiz-result.fail {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        #quiz-timer {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        #quiz-start-info {
+            background-color: var(--bg-light);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px var(--shadow);
+            border: 1px solid var(--border-color);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        #quiz-start-info h3 {
+            font-size: 2em;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        #quiz-start-info p {
+            font-size: 1.2em;
+            color: #555;
+            margin-bottom: 25px;
+        }
+        #quiz-start-info .btn {
+            padding: 15px 30px;
+            font-size: 1.2em;
+        }
+
 
         /* Responsive Design */
         @media (max-width: 992px) {
@@ -1439,42 +1563,21 @@
             }
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
         /* الصورة الدائرية */
         .profile-image {
-    width: clamp(250px, 30vw, 220px);
-    height: clamp(250px, 30vw, 220px);
-    border-radius: 50%;
-    border: 5px solid var(--gold);
-    padding: 5px;
-    
-    margin: 20px auto; /* تغيير margin لتوسيط أفقي */
-    display: block; /* لضمان أن margin: auto يعمل */
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(45deg, #0074D9, #7FDBFF);
-    z-index: 5;
-}
+            width: clamp(250px, 30vw, 220px);
+            height: clamp(250px, 30vw, 220px);
+            border-radius: 50%;
+            border: 5px solid var(--gold);
+            padding: 5px;
+            
+            margin: 20px auto; /* تغيير margin لتوسيط أفقي */
+            display: block; /* لضمان أن margin: auto يعمل */
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(45deg, #0074D9, #7FDBFF);
+            z-index: 5;
+        }
         
         .profile-image img {
             width: 100%;
@@ -1501,26 +1604,26 @@
             width: calc(clamp(150px, 30vw, 220px) + 40px);
             height: calc(clamp(150px, 30vw, 220px) + 40px);
             border-radius: 50%;
-           
+            
             opacity: 0.7;
             z-index: 4;
         }
         
         /* بطاقة البرمجة والتصميم */
-       .design-card {
-    background: #0074D9;
-    color: white;
-    border-radius: 15px;
-    padding: 20px;
-    border: 2px solid rgba(0, 0, 0, 0);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    margin: 20px auto; /* تغيير margin لتوسيط أفقي */
-    max-width: 500px;
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-    display: block; /* لضمان عمل margin: auto */
-}
+        .design-card {
+            background: #0074D9;
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid rgba(0, 0, 0, 0);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            margin: 20px auto; /* تغيير margin لتوسيط أفقي */
+            max-width: 500px;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            display: block; /* لضمان عمل margin: auto */
+        }
         .design-card::before {
             content: '';
             position: absolute;
@@ -1551,8 +1654,7 @@
             color: var(--gold);
         }
         
-
-                /* صفحة الاتصال */
+        /* صفحة الاتصال */
         #contact-page {
             display: block;
             width: 100%;
@@ -1627,7 +1729,7 @@
         .whatsapp-btn {
             background:linear-gradient(45deg, var(--whatsapp-color), #2bc800);
         }
-         .whatsapp2-btn {
+        .whatsapp2-btn {
             background: linear-gradient(45deg, var(--whatsapp-color),#126001);
         }
 
@@ -1685,11 +1787,10 @@
         }
 
         #contact-page .main-title {
-    color: white;
-}
+            color: white;
+        }
 
-
- /* تأثيرات البرمجة - ثابتة */
+        /* تأثيرات البرمجة - ثابتة */
         .code-effects {
             display: flex;
             justify-content: center;
@@ -1705,10 +1806,7 @@
             box-shadow: 0 0 10px currentColor;
         }
 
-
-
-
-         .separator {
+        .separator {
             margin: -6px 0px;
             display: flex;
             justify-content: center;
@@ -1744,56 +1842,52 @@
             height: 100%;
         }
 
-
-        
         .social1-links {
-    display: flex;
-    gap: 15px; /* Space between buttons */
-    justify-content: center; /* Center the buttons */
-    padding: 10px;
-}
+            display: flex;
+            gap: 15px; /* Space between buttons */
+            justify-content: center; /* Center the buttons */
+            padding: 10px;
+        }
 
-.social1-links a {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 50px; /* Button size */
-    height: 50px;
-    background-color: #ffffff; /* White background */
-    color: #333; /* Icon color */
-    border-radius: 50%; /* Circular buttons */
-    text-decoration: none;
-    font-size: 24px; /* Icon size */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-    transition: all 0.3s ease; /* Smooth transition for hover effects */
-}
+        .social1-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px; /* Button size */
+            height: 50px;
+            background-color: #ffffff; /* White background */
+            color: #333; /* Icon color */
+            border-radius: 50%; /* Circular buttons */
+            text-decoration: none;
+            font-size: 24px; /* Icon size */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+            transition: all 0.3s ease; /* Smooth transition for hover effects */
+        }
 
-.social1-links a:hover {
-    transform: translateY(-3px); /* Lift effect on hover */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
-    background-color: #f0f0f0; /* Slightly darker white on hover */
-}
+        .social1-links a:hover {
+            transform: translateY(-3px); /* Lift effect on hover */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+            background-color: #f0f0f0; /* Slightly darker white on hover */
+        }
 
-.social1-links a i {
-    color: #333; /* Ensure icon color is consistent */
-}
+        .social1-links a i {
+            color: #333; /* Ensure icon color is consistent */
+        }
 
-/* Optional: Specific hover colors for each platform */
-.social1-links a[href*="facebook"]:hover {
-    color: #1877f2; /* Facebook blue */
-}
-.social1-links a[href*="whatsapp"]:hover {
-    color: #25d366; /* WhatsApp green */
-}
-.social1-links a[href*="youtube"]:hover {
-    color: #ff0000; /* YouTube red */
-}
+        /* Optional: Specific hover colors for each platform */
+        .social1-links a[href*="facebook"]:hover {
+            color: #1877f2; /* Facebook blue */
+        }
+        .social1-links a[href*="whatsapp"]:hover {
+            color: #25d366; /* WhatsApp green */
+        }
+        .social1-links a[href*="youtube"]:hover {
+            color: #ff0000; /* YouTube red */
+        }
 
     </style>
 </head>
-<body>
-
-    <div class="background-animation">
+<body oncontextmenu="return false;"> <div class="background-animation">
         <div class="circle circle-1"></div>
         <div class="circle circle-2"></div>
         <div class="circle circle-3"></div>
@@ -1822,7 +1916,7 @@
                 <img src="https://scontent.faly8-2.fna.fbcdn.net/v/t39.30808-6/470229934_446515841835041_2413616035024142761_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=JM04iN_G6SQQ7kNvwF9lBAf&_nc_oc=AdmC668FZi9_VT4A3tuwXM1Xpll7K_bhwglMyO9_6TKwGw0WdWr2nMerQF-DbhLvDRg&_nc_zt=23&_nc_ht=scontent.faly8-2.fna&_nc_gid=jFHVAYtRQsRTpq-xPwzD5w&oh=00_AfOpUOIkhWxeczRGTXr1h-HTEHBygIdV9s5fDengQBxLiQ&oe=684DEA41" alt="صورة تعليم اللغة العربية">
             </div>
         </section>
-       
+        
     </div>
 
     <div class="container" id="about-platform-screen">
@@ -1845,7 +1939,7 @@
                     <div class="social-links">
                         <a href="https://www.facebook.com/ahmed.elshora2/about_overview?locale=ar_AR" target="_blank" aria-label="فيسبوك"><i class="fab fa-facebook"></i></a>
                         <a href="https://wa.me/+201018979588" target="_blank" aria-label="واتساب"><i class="fab fa-whatsapp"></i></a>
-                        <a href="https://www.youtube.com/@mrahmedelshora" target="_blank" aria-label="يوتيوب"><i class="fab fa-youtube"></i></a>
+                        <a href="https://youtube.com/@mrahmedelshora?si=O_hL1yHsPyDWxK67" target="_blank" aria-label="يوتيوب"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
                 <div class="about-features">
@@ -1861,36 +1955,31 @@
                 </div>
             </div>
             
-            <!-- هالة الصورة -->
             <div class="profile-halo"></div>
             
-            <!-- الصورة الدائرية -->
             <div class="profile-image">
                 <img src="https://scontent.faly8-2.fna.fbcdn.net/v/t39.30808-6/476378289_1168305034818049_8033882813266140408_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=P2oCppDUDh8Q7kNvwHO7jSq&_nc_oc=Adk-4dwDqE_srcFbeZqXwFlqhB5YVk2yQXlc6U6DrApx2WTga-eWUyxNlWcFUs5_JCE&_nc_zt=23&_nc_ht=scontent.faly8-2.fna&_nc_gid=gtaP94no4-YVrkjb32AOKw&oh=00_AfP2Bxtzj3U8x8TYoY5PUqxWS08mCcEFC7u2wqUQaog7Cg&oe=684E04D4" alt="الصورة الشخصية">
             </div>
             
-            <!-- بطاقة البرمجة والتصميم -->
             <div class="design-card">
                 <div class="design-title">
                     <div class="emoji">✨</div>
-                   <div>بَرْمَجَةٌ وَتَصْمِيمٌ</div>
+                    <div>بَرْمَجَةٌ وَتَصْمِيمٌ</div>
                     <div class="emoji">✨</div>
                     
                 </div>
-                 <div class="separator">
+                <div class="separator">
                     <div class="separator-line"></div>
                     <div class="separator-emoji">✧</div>
                     <div class="separator-line"></div>
                 </div>
-               
                 
-               <div class="name">الْمُهَنْدِسُ / عَبْدُ الرَّحْمَنِ مُحَمَّدٍ كَمَالْ حَمُودَةٌ</div>
-                 <div class="separator">
+                <div class="name">الْمُهَنْدِسُ / عَبْدُ الرَّحْمَنِ مُحَمَّدٍ كَمَالْ حَمُودَةٌ</div>
+                    <div class="separator">
                     <div class="separator-line"></div>
                     <div class="separator-emoji">✧</div>
                     <div class="separator-line"></div>
                 </div>
-                <!-- تأثيرات البرمجة -->
                 <div class="code-effects">
                     <div class="code-dot" style="background:#ff0000;"></div>
                     <div class="code-dot" style="background: #FFDC00;"></div>
@@ -1902,9 +1991,7 @@
                     <div class="code-dot" style="background: #000000;"></div>
                 </div>
             </div>
-              
             
-            <!-- صفحة الاتصال -->
             <section id="contact-page" class="page-section">
                 <h2 class="main-title">اتصل بي 📩</h2>
                 <div class="phone-contact">
@@ -1918,7 +2005,7 @@
                         <a href="https://wa.me/+201201898518" class="social-btn whatsapp-btn" target="_blank" aria-label="تواصل معنا عبر واتساب">
                             <i class="fab fa-whatsapp"></i> تواصل عبر واتساب1️⃣ 
                         </a>
-                         <a href="https://wa.me/+201029952248" class="social-btn whatsapp2-btn" target="_blank" aria-label="تواصل معنا عبر واتساب">
+                        <a href="https://wa.me/+201029952248" class="social-btn whatsapp2-btn" target="_blank" aria-label="تواصل معنا عبر واتساب">
                             <i class="fab fa-whatsapp"></i> تواصل عبر واتساب2️⃣
                         </a>
                         <a href="https://www.facebook.com/abdelrahman.hamouda.18?locale=ar_AR" class="social-btn facebook-btn" target="_blank" aria-label="تواصل معنا عبر فيسبوك">
@@ -1928,10 +2015,10 @@
                             <i class="fab fa-instagram"></i> تواصل عبر إنستغرام 
                         </a>
                         <a href="https://www.linkedin.com/in/abdo-hamouda-a3b609328/" class="social-btn linkedin-btn" target="_blank" aria-label="تواصل معنا عبر لينكدإن">
-                            <i class="fab fa-linkedin-in"></i>   لينكدإن (LinkedIn)
+                            <i class="fab fa-linkedin-in"></i>     لينكدإن (LinkedIn)
                         </a>
                         <a href="https://github.com/hamouda-10" class="social-btn github-btn" target="_blank" aria-label="تواصل معنا عبر جيت هاب">
-                            <i class="fab fa-github"></i>  جيت هاب (GitHub)
+                            <i class="fab fa-github"></i>   جيت هاب (GitHub)
                         </a>
                         <a href="https://youtube.com/@hamouda_100?si=cH4WdpEmqRmt4Upu" class="social-btn youtube-btn" target="_blank" aria-label="قناة اليوتيوب">
                             <i class="fab fa-youtube"></i> قناة اليوتيوب
@@ -1939,9 +2026,6 @@
                     </div>
                 </div>
             </section>
-
-      
-        
     </div>
 
     <div class="container" id="auth-screen">
@@ -2025,16 +2109,18 @@
                     <img src="https://scontent.faly8-1.fna.fbcdn.net/v/t39.30808-6/470241470_446516861834939_4004555550868124438_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=Id6ihm1igLgQ7kNvwG7ojxG&_nc_oc=Adlxn9zxTKuczKxat4Z-PqqAK1wbHdplIi4zB7OG0FxKChlTLw6paM1CCdQeM4pYTe0&_nc_zt=23&_nc_ht=scontent.faly8-1.fna&_nc_gid=n1cchjETyQro7E4beZercg&oh=00_AfMqJpF9vN7S5fp-nr9JXv92gt9ALM5dg1f09jblFDZFmg&oe=684DD7AC" alt="صورة المستر" class="profile-avatar">
                     <h3>مستر أحمد الشورى</h3>
                     <p>مدرس لغة عربية</p>
-                   <div class="social1-links">
+                    <div class="social1-links">
                         <a href="https://www.facebook.com/ahmed.elshora2/about_overview?locale=ar_AR" target="_blank" aria-label="فيسبوك"><i class="fab fa-facebook"></i></a>
                         <a href="https://wa.me/+201018979588" target="_blank" aria-label="واتساب"><i class="fab fa-whatsapp"></i></a>
-                        <a href="https://www.youtube.com/@mrahmedelshora" target="_blank" aria-label="يوتيوب"><i class="fab fa-youtube"></i></a>
+                        <a href="https://youtube.com/@mrahmedelshora?si=O_hL1yHsPyDWxK67" target="_blank" aria-label="يوتيوب"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
                 <nav class="sidebar-nav">
                     <ul>
                         <li><a href="#" class="active" onclick="showTeacherSection('upload-video')"><i class="fas fa-cloud-upload-alt"></i> رفع فيديو جديد</a></li>
                         <li><a href="#" onclick="showTeacherSection('manage-videos')"><i class="fas fa-video"></i> إدارة الفيديوهات</a></li>
+                        <li><a href="#" onclick="showTeacherSection('create-quiz')"><i class="fas fa-edit"></i> إنشاء اختبار</a></li>
+                        <li><a href="#" onclick="showTeacherSection('manage-quizzes')"><i class="fas fa-tasks"></i> إدارة الاختبارات</a></li>
                         <li><a href="#" onclick="showTeacherSection('student-stats')"><i class="fas fa-chart-line"></i> إحصائيات الطلاب</a></li>
                         <li><a href="#" onclick="showTeacherSection('student-list')"><i class="fas fa-users"></i> قائمة الطلاب</a></li>
                         <li><a href="#" onclick="showTeacherSection('platform-settings')"><i class="fas fa-cog"></i> إعدادات المنصة</a></li>
@@ -2054,32 +2140,33 @@
                             <textarea id="video-description" placeholder="اكتب وصفًا شاملاً وموجزًا لمحتوى الفيديو..." rows="4"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="video-thumbnail">صورة مصغرة للفيديو (اختياري، يفضل JPG/PNG):</label>
-                            <input type="file" id="video-thumbnail" accept="image/*">
+                            <label for="video-url">رابط الفيديو (YouTube أو Google Drive):</label>
+                            <input type="url" id="video-url" placeholder="مثال: https://www.youtube.com/watch?v=YOUR_VIDEO_ID أو رابط جوجل درايف" required>
+                            <small style="color: #666; display: block; margin-top: 5px; text-align: right;">يرجى التأكد من أن الرابط قابل للمشاهدة علنًا.</small>
+                        </div>
+                        <div class="form-group" style="display: none;">
+                            <label for="video-thumbnail-url">رابط الصورة المصغرة (يتم استخراجه تلقائيًا):</label>
+                            <input type="text" id="video-thumbnail-url" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="video-file">ملف الفيديو (بصيغة MP4، الحد الأقصى للحجم 2GB - *الحد الأقصى للتجربة فقط*):</label>
-                            <input type="file" id="video-file" accept="video/mp4" required>
+                            <label for="video-target-grade-type">نوع الصف المستهدف:</label>
+                            <select id="video-target-grade-type" required>
+                                <option value="">اختر النوع</option>
+                                <option value="عام">عام</option>
+                                <option value="أزهر">أزهر</option>
+                            </select>
                         </div>
-                           <div class="form-group">
-                                <label for="video-target-grade-type">نوع الصف المستهدف:</label>
-                                <select id="video-target-grade-type" required>
-                                    <option value="">اختر النوع</option>
-                                    <option value="عام">عام</option>
-                                    <option value="أزهر">أزهر</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="video-target-grade">الصف الدراسي المستهدف:</label>
-                                <select id="video-target-grade" required>
-                                    <option value="">اختر الصف</option>
-                                    <option value="أول ثانوي">أول ثانوي</option>
-                                    <option value="ثاني ثانوي">ثاني ثانوي</option>
-                                    <option value="ثالث ثانوي">ثالث ثانوي</option>
-                                </select>
-                            </div>
-                        <button type="submit" class="btn primary-btn"><i class="fas fa-paper-plane"></i> رفع الفيديو الآن</button>
-                        <div class="loading-spinner" id="upload-spinner"></div>
+                        <div class="form-group">
+                            <label for="video-target-grade">الصف الدراسي المستهدف:</label>
+                            <select id="video-target-grade" required>
+                                <option value="">اختر الصف</option>
+                                <option value="أول ثانوي">أول ثانوي</option>
+                                <option value="ثاني ثانوي">ثاني ثانوي</option>
+                                <option value="ثالث ثانوي">ثالث ثانوي</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn primary-btn"><i class="fas fa-paper-plane"></i> إضافة الفيديو</button>
+                        <div class="loading-spinner" id="upload-spinner" style="display: none;"></div>
                         <p class="form-message" id="upload-video-message"></p>
                     </form>
                 </div>
@@ -2095,6 +2182,67 @@
                     </div>
                 </div>
 
+                <div class="dashboard-section" id="create-quiz">
+                    <h2>إنشاء اختبار جديد</h2>
+                    <p class="section-description">يمكنك إنشاء اختبارات لطلابك وتحديد الصف المستهدف.</p>
+                    <form id="create-quiz-form">
+                        <div class="form-group">
+                            <label for="quiz-title">عنوان الاختبار:</label>
+                            <input type="text" id="quiz-title" placeholder="مثال: اختبار نحو الوحدة الأولى" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="quiz-duration">مدة الاختبار بالدقائق:</label>
+                            <input type="number" id="quiz-duration" min="1" value="30" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="quiz-target-grade-type">نوع الصف المستهدف:</label>
+                            <select id="quiz-target-grade-type" required>
+                                <option value="">اختر النوع</option>
+                                <option value="عام">عام</option>
+                                <option value="أزهر">أزهر</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="quiz-target-grade">الصف الدراسي المستهدف:</label>
+                            <select id="quiz-target-grade" required>
+                                <option value="">اختر الصف</option>
+                                <option value="أول ثانوي">أول ثانوي</option>
+                                <option value="ثاني ثانوي">ثاني ثانوي</option>
+                                <option value="ثالث ثانوي">ثالث ثانوي</option>
+                            </select>
+                        </div>
+                        <h3>الأسئلة:</h3>
+                        <div id="quiz-questions-container">
+                            <div class="question-block">
+                                <label>السؤال 1:</label>
+                                <input type="text" class="question-text" placeholder="نص السؤال" required>
+                                <label>الخيارات:</label>
+                                <input type="text" class="option-text" placeholder="الخيار أ" required>
+                                <input type="radio" name="q1-answer" value="0" required> (صحيح)<br>
+                                <input type="text" class="option-text" placeholder="الخيار ب" required>
+                                <input type="radio" name="q1-answer" value="1"> (صحيح)<br>
+                                <input type="text" class="option-text" placeholder="الخيار ج" required>
+                                <input type="radio" name="q1-answer" value="2"> (صحيح)<br>
+                                <input type="text" class="option-text" placeholder="الخيار د" required>
+                                <input type="radio" name="q1-answer" value="3"> (صحيح)<br>
+                            </div>
+                        </div>
+                        <button type="button" class="btn secondary-btn" onclick="addQuestion()"><i class="fas fa-plus"></i> إضافة سؤال</button>
+                        <button type="submit" class="btn primary-btn"><i class="fas fa-save"></i> حفظ الاختبار</button>
+                        <p class="form-message" id="create-quiz-message"></p>
+                    </form>
+                </div>
+
+                <div class="dashboard-section" id="manage-quizzes">
+                    <h2>إدارة الاختبارات</h2>
+                    <p class="section-description">عرض، تعديل، أو حذف الاختبارات التي أنشأتها.</p>
+                    <div id="quizzes-list">
+                        <div class="no-content">
+                            <p><i class="fas fa-exclamation-circle"></i> لا توجد اختبارات متاحة حتى الآن.</p>
+                            <button class="btn primary-btn" onclick="showTeacherSection('create-quiz')"><i class="fas fa-plus-circle"></i> إنشاء اختبار جديد</button>
+                        </div>
+                    </div>
+                </div>
                 <div class="dashboard-section" id="student-stats">
                     <h2>إحصائيات الطلاب</h2>
                     <p class="section-description">نظرة عامة على أداء وتفاعل الطلاب مع المحتوى.</p>
@@ -2110,6 +2258,10 @@
                         <div class="stat-card">
                             <h3><i class="fas fa-chart-bar"></i> نسبة التفاعل</h3>
                             <p id="avg-engagement">0%</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3><i class="fas fa-clipboard-list"></i> إجمالي الاختبارات</h3>
+                            <p id="total-quizzes">0</p>
                         </div>
                     </div>
                     <div class="recent-activity">
@@ -2132,11 +2284,12 @@
                                     <th>الصف</th>
                                     <th>نوع الصف</th>
                                     <th>عدد الفيديوهات المشاهدة</th>
+                                    <th>عدد الاختبارات المكتملة</th>
                                     <th>تفاصيل إضافية</th>
                                 </tr>
                             </thead>
                             <tbody id="registered-students-body">
-                                <tr><td colspan="6" class="no-content-table">لا يوجد طلاب مسجلون حتى الآن.</td></tr>
+                                <tr><td colspan="7" class="no-content-table">لا يوجد طلاب مسجلون حتى الآن.</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -2152,11 +2305,11 @@
                         </div>
                         <div class="form-group">
                             <label for="contact-email">البريد الإلكتروني للدعم:</label>
-                            <input type="email" id="contact-email" placeholder="hamoudaabdo689@gmail.com">
+                            <input type="email" id="contact-email" placeholder="support@yourdomain.com">
                         </div>
                         <div class="form-group">
                             <label for="contact-phone">رقم هاتف الدعم:</label>
-                            <input type="tel" id="contact-phone" placeholder="01018979588">
+                            <input type="tel" id="contact-phone" placeholder="010XXXXXXXXX">
                         </div>
                         <div class="form-group">
                             <label for="security-level">مستوى الأمان (للفيديوهات):</label>
@@ -2170,10 +2323,8 @@
                         <p class="form-message" id="settings-message"></p>
                     </form>
                 </div>
-
             </main>
         </section>
-
     </div>
 
     <div class="container" id="student-dashboard">
@@ -2183,7 +2334,7 @@
                 <h1>مرحباً بك يا <span id="student-dashboard-name">طالب!</span></h1>
             </div>
             <nav class="main-nav">
-                   <button class="back-btn" onclick="logoutStudent()"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
+                    <button class="back-btn" onclick="logoutStudent()"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
             </nav>
         </header>
         <section class="student-content">
@@ -2196,6 +2347,7 @@
                 <nav class="sidebar-nav">
                     <ul>
                         <li><a href="#" class="active" onclick="showStudentSection('my-videos')"><i class="fas fa-video"></i> فيديوهاتي الدراسية</a></li>
+                        <li><a href="#" onclick="showStudentSection('my-quizzes')"><i class="fas fa-clipboard-list"></i> اختباراتي</a></li>
                         <li><a href="#" onclick="showStudentSection('my-progress')"><i class="fas fa-chart-line"></i> تقدمي الدراسي</a></li>
                         <li><a href="#" onclick="showStudentSection('my-profile')"><i class="fas fa-user-circle"></i> ملفي الشخصي</a></li>
                     </ul>
@@ -2213,16 +2365,41 @@
                     </div>
                 </div>
 
+                <div class="dashboard-section" id="my-quizzes">
+                    <h2>اختباراتي المتاحة</h2>
+                    <p class="section-description">تصفح الاختبارات المتاحة لك وحاول تحقيق أفضل النتائج!</p>
+                    <div id="student-quizzes-list">
+                        <div class="no-content">
+                            <p><i class="fas fa-exclamation-circle"></i> لا توجد اختبارات متاحة لك حالياً.</p>
+                            <p>قد يتم إضافة اختبارات جديدة قريباً، أو تواصل مع المستر للمزيد من المعلومات.</p>
+                        </div>
+                    </div>
+                    <div id="active-quiz-container" style="display:none;">
+                        <h2 id="active-quiz-title"></h2>
+                        <p id="quiz-timer"></p>
+                        <form id="current-quiz-form">
+                            <div id="quiz-questions-display">
+                                </div>
+                            <button type="submit" class="btn primary-btn"><i class="fas fa-check-circle"></i> تسليم الاختبار</button>
+                        </form>
+                        <div class="quiz-result" id="quiz-submission-result" style="display:none;"></div>
+                    </div>
+                </div>
                 <div class="dashboard-section" id="my-progress">
                     <h2>تقدمي الدراسي</h2>
                     <p class="section-description">تتبع مشاهداتك وتقدمك في فيديوهات مستر أحمد الشورى.</p>
                     <div class="progress-info">
                         <p><i class="fas fa-check-circle"></i> عدد الفيديوهات التي شاهدتها: <span id="videos-watched-count">0</span></p>
                         <p><i class="fas fa-hourglass-half"></i> إجمالي وقت المشاهدة التقريبي: <span id="total-watch-time">0 دقائق</span></p>
+                        <p><i class="fas fa-award"></i> عدد الاختبارات التي أكملتها: <span id="quizzes-completed-count">0</span></p>
                     </div>
                     <h3><i class="fas fa-list-alt"></i> سجل مشاهداتي</h3>
                     <ul id="student-watch-history">
                         <li>لا توجد سجلات مشاهدة حتى الآن.</li>
+                    </ul>
+                    <h3><i class="fas fa-poll-h"></i> نتائج اختباراتي</h3>
+                    <ul id="student-quiz-results">
+                        <li>لا توجد نتائج اختبارات حتى الآن.</li>
                     </ul>
                 </div>
 
@@ -2262,26 +2439,19 @@
                 </div>
             </main>
         </section>
-
     </div>
 
     <div id="video-modal" class="modal">
         <div class="modal-content">
-            <span class="close-button" onclick="closeVideoModal()">&times;</span>
+            <span class="close-button" onclick="closeVideoModal()">×</span>
             <h3 id="modal-video-title">عنوان الفيديو</h3>
             <div class="video-wrapper">
-                <video id="player" controls controlsList="nodownload" oncontextmenu="return false;" disablePictureInPicture>
-                    <source id="video-source" src="" type="video/mp4">
-                    متصفحك لا يدعم تشغيل الفيديوهات.
-                </video>
-            </div>
+                </div>
             <p id="modal-video-description" class="modal-video-description">وصف الفيديو هنا.</p>
             <p class="view-count-text">عدد المشاهدات: <span id="modal-view-count">0</span></p>
         </div>
     </div>
 
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <script>
         // --- Global State Management (Simulated Backend Data) ---
         // In a real application, this data would come from a secure backend server and database.
@@ -2295,6 +2465,8 @@
         let videos = JSON.parse(localStorage.getItem('videos')) || [];
         let studentLoginLog = JSON.parse(localStorage.getItem('studentLoginLog')) || [];
         let studentWatchHistory = JSON.parse(localStorage.getItem('studentWatchHistory')) || {}; // { studentId: [{ videoId, title, watchedAt }] }
+        let quizzes = JSON.parse(localStorage.getItem('quizzes')) || []; // New: Stores quizzes created by teacher
+        let studentQuizResults = JSON.parse(localStorage.getItem('studentQuizResults')) || {}; // New: Stores student quiz attempts
         let platformSettings = JSON.parse(localStorage.getItem('platformSettings')) || {
             welcomeMessage: "أهلاً بكم في منصة مستر أحمد الشورى التعليمية!",
             contactEmail: "support@yourdomain.com",
@@ -2309,6 +2481,8 @@
             localStorage.setItem('videos', JSON.stringify(videos));
             localStorage.setItem('studentLoginLog', JSON.stringify(studentLoginLog));
             localStorage.setItem('studentWatchHistory', JSON.stringify(studentWatchHistory));
+            localStorage.setItem('quizzes', JSON.stringify(quizzes)); // Save quizzes
+            localStorage.setItem('studentQuizResults', JSON.stringify(studentQuizResults)); // Save quiz results
             localStorage.setItem('platformSettings', JSON.stringify(platformSettings));
             sessionStorage.setItem('currentUser', JSON.stringify(currentUser)); // Persist current user session
         }
@@ -2471,6 +2645,7 @@
                 // Update stats
                 document.getElementById('total-students').textContent = students.length;
                 document.getElementById('total-videos').textContent = videos.length;
+                document.getElementById('total-quizzes').textContent = quizzes.length; // New: Total quizzes
                 
                 // Calculate average engagement (simplified for demo: count unique students who watched at least one video)
                 const uniqueViewers = new Set();
@@ -2498,17 +2673,20 @@
                 const studentsTableBody = document.getElementById('registered-students-body');
                 studentsTableBody.innerHTML = '';
                 if (students.length === 0) {
-                    studentsTableBody.innerHTML = '<tr><td colspan="6" class="no-content-table">لا يوجد طلاب مسجلون حتى الآن.</td></tr>';
+                    studentsTableBody.innerHTML = '<tr><td colspan="7" class="no-content-table">لا يوجد طلاب مسجلون حتى الآن.</td></tr>';
                 } else {
                     students.forEach(student => {
                         const tr = document.createElement('tr');
                         const watchedCount = studentWatchHistory[student.id] ? studentWatchHistory[student.id].length : 0;
+                        const completedQuizzesCount = studentQuizResults[student.id] ? Object.keys(studentQuizResults[student.id]).length : 0; // New: completed quizzes
+
                         tr.innerHTML = `
                             <td data-label="الاسم">${student.name}</td>
                             <td data-label="رقم الهاتف">${student.phone}</td>
                             <td data-label="الصف">${student.grade}</td>
                             <td data-label="نوع الصف">${student.gradeType}</td>
                             <td data-label="عدد الفيديوهات المشاهدة">${watchedCount}</td>
+                            <td data-label="عدد الاختبارات المكتملة">${completedQuizzesCount}</td>
                             <td data-label="تفاصيل إضافية"><button class="btn outline-btn" onclick="viewStudentDetails('${student.id}')"><i class="fas fa-eye"></i> عرض</button></td>
                         `;
                         studentsTableBody.appendChild(tr);
@@ -2516,6 +2694,7 @@
                 }
 
                 renderTeacherVideos(); // Ensure videos are rendered when managing videos section is active
+                renderManageQuizzes(); // Render quizzes for teacher
                 loadPlatformSettings(); // Load settings when teacher dashboard is updated
             }
         }
@@ -2538,70 +2717,93 @@
                 updateTeacherDashboard(); // Re-render stats and student list
             } else if (sectionId === 'platform-settings') {
                 loadPlatformSettings();
+            } else if (sectionId === 'manage-quizzes') {
+                renderManageQuizzes();
             }
         }
 
-        document.getElementById('upload-video-form').addEventListener('submit', function(e) {
+        document.getElementById('upload-video-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             clearFormMessages();
+            
             const title = document.getElementById('video-title').value.trim();
             const description = document.getElementById('video-description').value.trim();
-            const thumbnailFile = document.getElementById('video-thumbnail').files[0];
-            const videoFile = document.getElementById('video-file').files[0];
+            const videoUrlInput = document.getElementById('video-url').value.trim(); // رابط الفيديو الخارجي
             const targetGradeType = document.getElementById('video-target-grade-type').value;
             const targetGrade = document.getElementById('video-target-grade').value;
             const messageElementId = 'upload-video-message';
             const uploadSpinner = document.getElementById('upload-spinner');
 
-            if (!title || !videoFile || !targetGradeType || !targetGrade) {
-                showMessage(messageElementId, 'الرجاء إدخال عنوان الفيديو وملف الفيديو والصف المستهدف.', false);
+            if (!title || !videoUrlInput || !targetGradeType || !targetGrade) {
+                showMessage(messageElementId, 'الرجاء إدخال عنوان الفيديو ورابط الفيديو والصف المستهدف.', false);
                 return;
             }
 
-            // Basic file size validation (max 2GB simulated as 200MB for testing purposes, adjust as needed)
-            const MAX_FILE_SIZE = 200 * 1024 * 1024; // 200 MB
-            if (videoFile.size > MAX_FILE_SIZE) {
-                showMessage(messageElementId, 'حجم ملف الفيديو كبير جداً. الحد الأقصى 200 ميجابايت للتجربة.', false);
-                return;
-            }
-
-            // Simulate upload progress
             uploadSpinner.style.display = 'block';
-            showMessage(messageElementId, 'جاري رفع الفيديو، قد يستغرق الأمر بعض الوقت...', true);
+            showMessage(messageElementId, 'جاري معالجة الفيديو...', true);
 
+            let thumbnailUrl = 'https://via.placeholder.com/320x200/ADD8E6/FFFFFF?text=Video+Thumbnail'; // الصورة المصغرة الافتراضية
+            let processedVideoUrl = videoUrlInput; // الرابط الذي سيتم استخدامه في المشغل
+
+            // 1. محاولة استخلاص الصورة المصغرة ومعرفة نوع الفيديو (YouTube/Google Drive)
+            if (videoUrlInput.includes('youtube.com') || videoUrlInput.includes('youtu.be')) {
+                let videoId = '';
+                const youtubeRegex = /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+                const match = videoUrlInput.match(youtubeRegex);
+                if (match && match[1]) {
+                    videoId = match[1];
+                    thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`; // أو mqdefault, maxresdefault
+                    processedVideoUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&showinfo=0&rel=0&modestbranding=1&enablejsapi=1`; // اخفاء زر المشاركة والشعار
+                } else {
+                    showMessage(messageElementId, 'رابط يوتيوب غير صالح.', false);
+                    uploadSpinner.style.display = 'none';
+                    return;
+                }
+            } else if (videoUrlInput.includes('drive.google.com')) {
+                const driveRegex = /file\/d\/([a-zA-Z0-9_-]+)(?:\/view)?/;
+                const match = videoUrlInput.match(driveRegex);
+                if (match && match[1]) {
+                    const fileId = match[1];
+                    processedVideoUrl = `https://docs.google.com/file/d/${fileId}/preview`; // رابط المعاينة
+                    // لا يوجد طريقة سهلة لاستخلاص صورة مصغرة مباشرة من جوجل درايف بدون API
+                } else {
+                    showMessage(messageElementId, 'رابط جوجل درايف غير صالح. تأكد من أنه رابط ملف مباشر أو معاينة.', false);
+                    uploadSpinner.style.display = 'none';
+                    return;
+                }
+            } else {
+                showMessage(messageElementId, 'الرجاء إدخال رابط يوتيوب أو جوجل درايف. ستظهر الصورة المصغرة الافتراضية للفيديوهات الأخرى.', true);
+            }
+
+            document.getElementById('video-thumbnail-url').value = thumbnailUrl; // Update hidden thumbnail URL
+
+            // Simulate data saving
             setTimeout(() => {
-                // In a real application:
-                // 1. Upload videoFile to a secure storage (e.g., AWS S3, Google Cloud Storage).
-                //    This would return a secure, temporary, non-shareable URL or identifier.
-                // 2. Upload thumbnailFile if exists.
-                // 3. Save video metadata (title, description, secure_video_url, target_grade) to database.
-
-                // Simulate video storage and ID generation for frontend demo
                 const videoId = Date.now().toString();
-                const videoUrl = URL.createObjectURL(videoFile); // Create a temporary URL for demonstration
-                const thumbnailUrl = thumbnailFile ? URL.createObjectURL(thumbnailFile) : 'https://via.placeholder.com/320x200/ADD8E6/FFFFFF?text=Video+Thumbnail';
 
                 const newVideo = {
                     id: videoId,
                     title: title,
                     description: description,
                     thumbnail: thumbnailUrl,
-                    videoUrl: videoUrl, // This URL is temporary, replace with secure backend URL
+                    videoUrl: processedVideoUrl, // Use the processed URL for player
+                    originalUrl: videoUrlInput, // Keep original URL for reference
                     targetGradeType: targetGradeType,
                     targetGrade: targetGrade,
                     uploadDate: new Date().toLocaleDateString('ar-EG'),
-                    views: 0 // Initial views
+                    views: 0
                 };
 
                 videos.push(newVideo);
                 saveData();
                 uploadSpinner.style.display = 'none';
-                showMessage(messageElementId, 'تم رفع الفيديو بنجاح!', true);
-                document.getElementById('upload-video-form').reset(); // Clear form
-                renderTeacherVideos(); // Update the video list
-                updateTeacherDashboard(); // Update total video count
-            }, 2000); // Simulate network delay
+                showMessage(messageElementId, 'تم إضافة الفيديو بنجاح!', true);
+                document.getElementById('upload-video-form').reset();
+                renderTeacherVideos();
+                updateTeacherDashboard();
+            }, 1500); // Simulate network delay
         });
+
 
         function renderTeacherVideos() {
             const teacherVideoList = document.getElementById('teacher-video-list');
@@ -2618,7 +2820,12 @@
             }
 
             // Sort videos by upload date (most recent first)
-            const sortedVideos = [...videos].sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+            const sortedVideos = [...videos].sort((a, b) => {
+                const dateA = new Date(a.uploadDate.split('/').reverse().join('-'));
+                const dateB = new Date(b.uploadDate.split('/').reverse().join('-'));
+                return dateB - dateA;
+            });
+
 
             sortedVideos.forEach(video => {
                 const videoCard = document.createElement('div');
@@ -2682,6 +2889,17 @@
                     });
                 } else {
                     details += '\n\nلم يشاهد الطالب أي فيديوهات بعد.';
+                }
+
+                const studentQuizAttempts = studentQuizResults[student.id] || {};
+                const completedQuizzes = Object.values(studentQuizAttempts);
+                if (completedQuizzes.length > 0) {
+                    details += '\n\nنتائج الاختبارات:';
+                    completedQuizzes.forEach(quizAttempt => {
+                        details += `\n- ${quizAttempt.quizTitle}: ${quizAttempt.score}/${quizAttempt.totalQuestions} (في: ${quizAttempt.attemptedAt})`;
+                    });
+                } else {
+                    details += '\n\nلم يكمل الطالب أي اختبارات بعد.';
                 }
 
                 alert('تفاصيل الطالب:\n\n' + details);
@@ -2750,15 +2968,14 @@
                 document.getElementById('student-profile-info').textContent = `${student.grade} - ${student.gradeType}`;
                 document.getElementById('student-sidebar-avatar').src = student.profilePic;
 
-
                 // Populate Edit Profile form
                 document.getElementById('edit-student-name').value = student.name;
                 document.getElementById('edit-student-phone').value = student.phone;
                 document.getElementById('edit-student-grade-type').value = student.gradeType;
                 document.getElementById('edit-student-grade').value = student.grade;
-                // profile pic input is a file input, so it won't display current image path
 
                 renderStudentVideos(student.grade, student.gradeType);
+                renderStudentQuizzes(student.grade, student.gradeType); // New: Render student quizzes
                 updateStudentProgress(student.id);
             }
         }
@@ -2778,7 +2995,11 @@
             if (sectionId === 'my-progress') {
                 updateStudentProgress(currentUser.data.id);
             } else if (sectionId === 'my-profile') {
-                 updateStudentDashboard(); // Reload profile data
+                updateStudentDashboard(); // Reload profile data
+            } else if (sectionId === 'my-quizzes') {
+                renderStudentQuizzes(currentUser.data.grade, currentUser.data.gradeType);
+                document.getElementById('active-quiz-container').style.display = 'none'; // Hide active quiz form
+                document.getElementById('quiz-submission-result').style.display = 'none'; // Hide quiz result
             }
         }
 
@@ -2849,7 +3070,11 @@
             }
             
             // Sort videos by upload date (most recent first) for students
-            const sortedVideos = [...filteredVideos].sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+            const sortedVideos = [...filteredVideos].sort((a, b) => {
+                const dateA = new Date(a.uploadDate.split('/').reverse().join('-'));
+                const dateB = new Date(b.uploadDate.split('/').reverse().join('-'));
+                return dateB - dateA;
+            });
 
             sortedVideos.forEach(video => {
                 const videoCard = document.createElement('div');
@@ -2894,6 +3119,25 @@
 
             document.getElementById('videos-watched-count').textContent = studentHistory.length;
             document.getElementById('total-watch-time').textContent = `${totalEstimatedWatchTimeMinutes} دقيقة`;
+
+            // Update quiz results in progress section
+            const quizResultsList = document.getElementById('student-quiz-results');
+            quizResultsList.innerHTML = '';
+            const studentQuizzes = studentQuizResults[studentId] || {};
+            const completedQuizzes = Object.values(studentQuizzes);
+
+            if (completedQuizzes.length === 0) {
+                quizResultsList.innerHTML = '<li><i class="fas fa-info-circle"></i> لا توجد نتائج اختبارات حتى الآن.</li>';
+            } else {
+                const sortedQuizResults = [...completedQuizzes].sort((a, b) => new Date(b.attemptedAt) - new Date(a.attemptedAt));
+                sortedQuizResults.forEach(result => {
+                    const li = document.createElement('li');
+                    const statusClass = result.score >= (result.totalQuestions / 2) ? 'correct-answer' : 'wrong-answer'; // Simple pass/fail logic
+                    li.innerHTML = `<span><i class="fas fa-clipboard-check"></i> ${result.quizTitle}: <strong class="${statusClass}">${result.score}/${result.totalQuestions}</strong></span> <span class="watch-time">اكتمل في ${result.attemptedAt}</span>`;
+                    quizResultsList.appendChild(li);
+                });
+            }
+            document.getElementById('quizzes-completed-count').textContent = completedQuizzes.length;
         }
 
         function logoutStudent() {
@@ -2911,33 +3155,35 @@
 
         // --- Video Player Modal Logic ---
         const videoModal = document.getElementById('video-modal');
-        const videoPlayer = document.getElementById('player');
-        const videoSource = document.getElementById('video-source');
+        const videoWrapper = document.querySelector('.video-wrapper');
         const modalVideoTitle = document.getElementById('modal-video-title');
         const modalVideoDescription = document.getElementById('modal-video-description');
         const modalViewCount = document.getElementById('modal-view-count');
 
-        function applyVideoSecuritySettings() {
+        function applyVideoSecuritySettings(playerElement) {
             const level = platformSettings.securityLevel;
-            videoPlayer.controlsList = 'nodownload'; // Always disable download
 
-            if (level === 'متوسط') {
-                // Disable fullscreen button (browser-specific and not fully reliable via controlsList)
-                videoPlayer.controlsList += ' nofullscreen';
-                // Attempt to prevent right-click
-                videoPlayer.oncontextmenu = () => false;
-            } else if (level === 'عالي') {
-                // Disable everything possible
-                videoPlayer.controlsList += ' nofullscreen noplaybackrate';
-                videoPlayer.oncontextmenu = () => false;
-                videoPlayer.disablePictureInPicture = true;
-                // Add a listener to try to prevent common screenshot shortcuts (limited effectiveness)
-                document.addEventListener('keydown', handleScreenshotKeys);
-            } else { // 'عادي'
-                videoPlayer.controlsList = 'nodownload'; // Only disable download
-                videoPlayer.oncontextmenu = null; // Re-enable right-click
-                videoPlayer.disablePictureInPicture = false;
-                document.removeEventListener('keydown', handleScreenshotKeys);
+            // Common for all levels: Disable right-click and prevent picture-in-picture
+            playerElement.oncontextmenu = () => false;
+            if (playerElement.tagName === 'VIDEO') { // Only applies to <video> elements
+                playerElement.controlsList = 'nodownload'; // Disable download for direct video
+                playerElement.disablePictureInPicture = true;
+            }
+            
+            // Specific controls for YouTube iframes (using URL parameters)
+            if (playerElement.tagName === 'IFRAME' && playerElement.src.includes('youtube.com/embed')) {
+                // For YouTube, share button and logo are usually controlled by URL params:
+                // rel=0 (hide related videos at end), modestbranding=1 (hide YouTube logo), showinfo=0 (hide video title/uploader)
+                // We've added these in the upload logic already.
+                // Disabling share button or watermark via CSS is usually not possible or reliable due to cross-origin policies.
+            } else if (playerElement.tagName === 'VIDEO') {
+                if (level === 'متوسط') {
+                    playerElement.controlsList += ' nofullscreen';
+                } else if (level === 'عالي') {
+                    playerElement.controlsList += ' nofullscreen noplaybackrate';
+                    // Blocking screenshot keys (browser-level, limited effectiveness)
+                    document.addEventListener('keydown', handleScreenshotKeys);
+                }
             }
         }
 
@@ -2950,31 +3196,51 @@
             }
         }
 
-
         function openVideoPlayer(videoId, isStudentView = false) {
             const video = videos.find(v => v.id === videoId);
             if (video) {
-                videoSource.src = video.videoUrl;
-                videoPlayer.load(); // Load the new video source
+                videoWrapper.innerHTML = ''; // Clear previous content
+
                 modalVideoTitle.textContent = video.title;
                 modalVideoDescription.textContent = video.description;
                 modalViewCount.textContent = video.views;
 
-                // Apply security settings based on current platform settings
-                applyVideoSecuritySettings();
+                let playerElement;
+
+                if (video.videoUrl.includes('youtube.com/embed')) {
+                    playerElement = document.createElement('iframe');
+                    playerElement.setAttribute('src', video.videoUrl);
+                    playerElement.setAttribute('frameborder', '0');
+                    playerElement.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+                    playerElement.setAttribute('allowfullscreen', '');
+                } else {
+                    playerElement = document.createElement('video');
+                    playerElement.setAttribute('controls', '');
+                    playerElement.setAttribute('autoplay', ''); // Autoplay for direct videos
+                    playerElement.setAttribute('src', video.videoUrl);
+                    playerElement.textContent = 'متصفحك لا يدعم تشغيل الفيديوهات.';
+                }
+                playerElement.style.position = 'absolute';
+                playerElement.style.top = '0';
+                playerElement.style.left = '0';
+                playerElement.style.width = '100%';
+                playerElement.style.height = '100%';
+                videoWrapper.appendChild(playerElement);
+
+                applyVideoSecuritySettings(playerElement); // Apply settings to the created player element
 
                 videoModal.style.display = 'flex';
-                videoPlayer.play();
+                // For YouTube iframes, autoplay is handled by URL parameter
+                // For direct videos, `autoplay` attribute handles it.
 
                 if (isStudentView && currentUser && currentUser.type === 'student') {
                     const studentId = currentUser.data.id;
                     if (!studentWatchHistory[studentId]) {
                         studentWatchHistory[studentId] = [];
                     }
-                    // Check if student already watched this video
                     const alreadyWatched = studentWatchHistory[studentId].some(item => item.videoId === videoId);
                     if (!alreadyWatched) {
-                        video.views++; // Increment view count (this is simulated, backend needed for real counts)
+                        video.views++; // Increment view count (simulated)
                         modalViewCount.textContent = video.views; // Update displayed count
                         studentWatchHistory[studentId].push({
                             videoId: video.id,
@@ -2991,11 +3257,10 @@
         }
 
         function closeVideoModal() {
-            videoPlayer.pause();
+            videoWrapper.innerHTML = ''; // Stop video playback by clearing content
             videoModal.style.display = 'none';
-            videoSource.src = ''; // Clear source to prevent background playing
             document.removeEventListener('keydown', handleScreenshotKeys); // Remove event listener when modal closes
-            // Re-render the student videos grid to update view counts on cards if student is active
+            
             if (currentUser && currentUser.type === 'student') {
                 renderStudentVideos(currentUser.data.grade, currentUser.data.gradeType);
             } else if (currentUser && currentUser.type === 'teacher') {
@@ -3010,8 +3275,440 @@
             }
         }
 
+        // --- Teacher Quiz Management Logic ---
+        let questionCounter = 1;
+
+        function addQuestion() {
+            questionCounter++;
+            const container = document.getElementById('quiz-questions-container');
+            const newQuestionBlock = document.createElement('div');
+            newQuestionBlock.classList.add('question-block');
+            newQuestionBlock.innerHTML = `
+                <label>السؤال ${questionCounter}:</label>
+                <input type="text" class="question-text" placeholder="نص السؤال" required>
+                <label>الخيارات:</label>
+                <input type="text" class="option-text" placeholder="الخيار أ" required>
+                <input type="radio" name="q${questionCounter}-answer" value="0" required> (صحيح)<br>
+                <input type="text" class="option-text" placeholder="الخيار ب" required>
+                <input type="radio" name="q${questionCounter}-answer" value="1"> (صحيح)<br>
+                <input type="text" class="option-text" placeholder="الخيار ج" required>
+                <input type="radio" name="q${questionCounter}-answer" value="2"> (صحيح)<br>
+                <input type="text" class="option-text" placeholder="الخيار د" required>
+                <input type="radio" name="q${questionCounter}-answer" value="3"> (صحيح)<br>
+                <button type="button" class="btn outline-btn" style="margin-top:10px;" onclick="removeQuestion(this)"><i class="fas fa-minus-circle"></i> حذف السؤال</button>
+            `;
+            container.appendChild(newQuestionBlock);
+        }
+
+        function removeQuestion(buttonElement) {
+            buttonElement.closest('.question-block').remove();
+            // Optional: re-number questions if needed, but not strictly necessary for functionality
+        }
+
+        document.getElementById('create-quiz-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearFormMessages();
+            const quizTitle = document.getElementById('quiz-title').value.trim();
+            const quizDuration = parseInt(document.getElementById('quiz-duration').value);
+            const targetGradeType = document.getElementById('quiz-target-grade-type').value;
+            const targetGrade = document.getElementById('quiz-target-grade').value;
+            const messageElementId = 'create-quiz-message';
+
+            if (!quizTitle || !quizDuration || !targetGradeType || !targetGrade) {
+                showMessage(messageElementId, 'الرجاء ملء جميع حقول الاختبار الأساسية.', false);
+                return;
+            }
+
+            const questions = [];
+            const questionBlocks = document.querySelectorAll('#quiz-questions-container .question-block');
+            if (questionBlocks.length === 0) {
+                showMessage(messageElementId, 'الرجاء إضافة سؤال واحد على الأقل للاختبار.', false);
+                return;
+            }
+
+            for (let i = 0; i < questionBlocks.length; i++) {
+                const qBlock = questionBlocks[i];
+                const questionText = qBlock.querySelector('.question-text').value.trim();
+                const options = Array.from(qBlock.querySelectorAll('.option-text')).map(input => input.value.trim());
+                const correctAnswerIndex = qBlock.querySelector(`input[name="q${i+1}-answer"]:checked`)?.value;
+
+                if (!questionText || options.some(opt => !opt) || correctAnswerIndex === undefined) {
+                    showMessage(messageElementId, `الرجاء ملء جميع بيانات السؤال ${i+1} وتحديد الإجابة الصحيحة.`, false);
+                    return;
+                }
+                questions.push({
+                    question: questionText,
+                    options: options,
+                    correctAnswer: parseInt(correctAnswerIndex)
+                });
+            }
+
+            const newQuiz = {
+                id: Date.now().toString(),
+                title: quizTitle,
+                duration: quizDuration,
+                targetGradeType: targetGradeType,
+                targetGrade: targetGrade,
+                questions: questions,
+                creationDate: new Date().toLocaleDateString('ar-EG')
+            };
+
+            quizzes.push(newQuiz);
+            saveData();
+            showMessage(messageElementId, 'تم حفظ الاختبار بنجاح!', true);
+            document.getElementById('create-quiz-form').reset();
+            document.getElementById('quiz-questions-container').innerHTML = ''; // Clear questions
+            questionCounter = 0; // Reset counter for new quiz
+            addQuestion(); // Add first question back
+            renderManageQuizzes(); // Refresh the list of quizzes
+            updateTeacherDashboard(); // Update quiz count
+        });
+
+        function renderManageQuizzes() {
+            const quizzesListDiv = document.getElementById('quizzes-list');
+            quizzesListDiv.innerHTML = '';
+
+            if (quizzes.length === 0) {
+                quizzesListDiv.innerHTML = `
+                    <div class="no-content">
+                        <p><i class="fas fa-exclamation-circle"></i> لا توجد اختبارات متاحة حتى الآن.</p>
+                        <button class="btn primary-btn" onclick="showTeacherSection('create-quiz')"><i class="fas fa-plus-circle"></i> إنشاء اختبار جديد</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const sortedQuizzes = [...quizzes].sort((a, b) => {
+                const dateA = new Date(a.creationDate.split('/').reverse().join('-'));
+                const dateB = new Date(b.creationDate.split('/').reverse().join('-'));
+                return dateB - dateA;
+            });
+
+            sortedQuizzes.forEach(quiz => {
+                const quizCard = document.createElement('div');
+                quizCard.classList.add('quiz-card');
+                quizCard.innerHTML = `
+                    <h3>${quiz.title}</h3>
+                    <p>المدة: ${quiz.duration} دقيقة</p>
+                    <p>الأسئلة: ${quiz.questions.length}</p>
+                    <p>الصف المستهدف: ${quiz.targetGrade} (${quiz.targetGradeType})</p>
+                    <p>تاريخ الإنشاء: ${quiz.creationDate}</p>
+                    <div class="btn-group">
+                        <button class="btn primary-btn" onclick="viewQuizDetailsTeacher('${quiz.id}')"><i class="fas fa-eye"></i> عرض التفاصيل</button>
+                        <button class="btn secondary-btn" onclick="editQuiz('${quiz.id}')"><i class="fas fa-edit"></i> تعديل</button>
+                        <button class="btn outline-btn" onclick="deleteQuiz('${quiz.id}')"><i class="fas fa-trash-alt"></i> حذف</button>
+                    </div>
+                `;
+                quizzesListDiv.appendChild(quizCard);
+            });
+        }
+
+        function viewQuizDetailsTeacher(quizId) {
+            const quiz = quizzes.find(q => q.id === quizId);
+            if (quiz) {
+                let details = `عنوان الاختبار: ${quiz.title}\nالمدة: ${quiz.duration} دقيقة\nالصف المستهدف: ${quiz.targetGrade} (${quiz.targetGradeType})\nتاريخ الإنشاء: ${quiz.creationDate}\n\nالأسئلة:\n`;
+                quiz.questions.forEach((q, index) => {
+                    details += `\nسؤال ${index + 1}: ${q.question}\n`;
+                    q.options.forEach((opt, optIndex) => {
+                        details += `  ${String.fromCharCode(65 + optIndex)}. ${opt} ${optIndex === q.correctAnswer ? '(الإجابة الصحيحة)' : ''}\n`;
+                    });
+                });
+                alert(details);
+            }
+        }
+
+        function editQuiz(quizId) {
+            alert('وظيفة تعديل الاختبار غير مفعلة في هذه النسخة التجريبية. (تعديل الاختبار ' + quizId + ')');
+        }
+
+        function deleteQuiz(quizId) {
+            if (confirm('هل أنت متأكد من حذف هذا الاختبار؟ هذا الإجراء لا يمكن التراجع عنه.')) {
+                quizzes = quizzes.filter(q => q.id !== quizId);
+                // Remove quiz results for this quiz from all students
+                for (const studentId in studentQuizResults) {
+                    delete studentQuizResults[studentId][quizId];
+                }
+                saveData();
+                renderManageQuizzes();
+                updateTeacherDashboard();
+            }
+        }
+
+        // --- Student Quizzes Logic ---
+        let currentActiveQuiz = null;
+        let quizTimerInterval;
+        let quizTimeRemaining;
+
+        function renderStudentQuizzes(grade, gradeType) {
+            const studentQuizzesListDiv = document.getElementById('student-quizzes-list');
+            studentQuizzesListDiv.innerHTML = ''; // Clear previous quizzes
+
+            const filteredQuizzes = quizzes.filter(quiz =>
+                quiz.targetGrade === grade && quiz.targetGradeType === gradeType
+            );
+
+            if (filteredQuizzes.length === 0) {
+                studentQuizzesListDiv.innerHTML = `
+                    <div class="no-content">
+                        <p><i class="fas fa-exclamation-circle"></i> لا توجد اختبارات متاحة لك حالياً.</p>
+                        <p>قد يتم إضافة اختبارات جديدة قريباً، أو تواصل مع المستر للمزيد من المعلومات.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const studentId = currentUser.data.id;
+            const sortedQuizzes = [...filteredQuizzes].sort((a, b) => {
+                const dateA = new Date(a.creationDate.split('/').reverse().join('-'));
+                const dateB = new Date(b.creationDate.split('/').reverse().join('-'));
+                return dateB - dateA;
+            });
+
+            sortedQuizzes.forEach(quiz => {
+                const quizCard = document.createElement('div');
+                quizCard.classList.add('quiz-card');
+                const hasAttempted = studentQuizResults[studentId] && studentQuizResults[studentId][quiz.id];
+                const buttonText = hasAttempted ? '<i class="fas fa-history"></i> عرض النتيجة' : '<i class="fas fa-play"></i> ابدأ الاختبار';
+                const buttonAction = hasAttempted ? `viewStudentQuizResult('${quiz.id}')` : `startQuiz('${quiz.id}')`;
+                const buttonClass = hasAttempted ? 'secondary-btn' : 'primary-btn';
+
+                quizCard.innerHTML = `
+                    <h3>${quiz.title}</h3>
+                    <p>المدة: ${quiz.duration} دقيقة</p>
+                    <p>عدد الأسئلة: ${quiz.questions.length}</p>
+                    <p>تاريخ الإنشاء: ${quiz.creationDate}</p>
+                    <div class="btn-group">
+                        <button class="btn ${buttonClass}" onclick="${buttonAction}">${buttonText}</button>
+                    </div>
+                `;
+                studentQuizzesListDiv.appendChild(quizCard);
+            });
+        }
+
+        function startQuiz(quizId) {
+            const quiz = quizzes.find(q => q.id === quizId);
+            if (!quiz) {
+                alert('عفواً، الاختبار غير موجود.');
+                return;
+            }
+
+            const studentId = currentUser.data.id;
+            if (studentQuizResults[studentId] && studentQuizResults[studentId][quiz.id]) {
+                alert('لقد أكملت هذا الاختبار بالفعل. يمكنك عرض نتيجتك من صفحة التقدم الدراسي.');
+                return;
+            }
+
+            currentActiveQuiz = quiz;
+            document.getElementById('student-quizzes-list').style.display = 'none';
+            document.getElementById('active-quiz-container').style.display = 'block';
+            document.getElementById('active-quiz-title').textContent = quiz.title;
+            document.getElementById('quiz-submission-result').style.display = 'none'; // Hide previous result
+
+            displayQuizQuestions(quiz.questions);
+            startQuizTimer(quiz.duration);
+
+            document.getElementById('current-quiz-form').onsubmit = function(e) {
+                e.preventDefault();
+                submitQuiz();
+            };
+        }
+
+        function displayQuizQuestions(questions) {
+            const quizQuestionsDisplay = document.getElementById('quiz-questions-display');
+            quizQuestionsDisplay.innerHTML = '';
+            questions.forEach((q, qIndex) => {
+                const questionBlock = document.createElement('div');
+                questionBlock.classList.add('question-block');
+                questionBlock.innerHTML = `<h4>سؤال ${qIndex + 1}: ${q.question}</h4>`;
+                q.options.forEach((option, optIndex) => {
+                    const label = document.createElement('label');
+                    label.innerHTML = `<input type="radio" name="question-${qIndex}" value="${optIndex}"> ${option}`;
+                    questionBlock.appendChild(label);
+                });
+                quizQuestionsDisplay.appendChild(questionBlock);
+            });
+        }
+
+        function startQuizTimer(durationMinutes) {
+            quizTimeRemaining = durationMinutes * 60;
+            const timerDisplay = document.getElementById('quiz-timer');
+            timerDisplay.textContent = `الوقت المتبقي: ${formatTime(quizTimeRemaining)}`;
+
+            quizTimerInterval = setInterval(() => {
+                quizTimeRemaining--;
+                timerDisplay.textContent = `الوقت المتبقي: ${formatTime(quizTimeRemaining)}`;
+                if (quizTimeRemaining <= 0) {
+                    clearInterval(quizTimerInterval);
+                    alert('انتهى الوقت! سيتم تسليم الاختبار تلقائياً.');
+                    submitQuiz(true); // Submit automatically when time is up
+                }
+            }, 1000);
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
+        function submitQuiz(timeUp = false) {
+            clearInterval(quizTimerInterval); // Stop the timer
+            const studentId = currentUser.data.id;
+            const quizForm = document.getElementById('current-quiz-form');
+            let correctAnswers = 0;
+            const studentAnswers = {};
+
+            currentActiveQuiz.questions.forEach((q, qIndex) => {
+                const selectedOption = quizForm.querySelector(`input[name="question-${qIndex}"]:checked`);
+                const studentAnswerIndex = selectedOption ? parseInt(selectedOption.value) : -1;
+                studentAnswers[qIndex] = studentAnswerIndex;
+
+                if (studentAnswerIndex === q.correctAnswer) {
+                    correctAnswers++;
+                }
+
+                // Show correction in the quiz form (optional, for review)
+                const questionBlock = quizForm.querySelector(`.question-block:nth-child(${qIndex + 1})`);
+                Array.from(questionBlock.querySelectorAll('input[type="radio"]')).forEach((radio, optIndex) => {
+                    const label = radio.closest('label');
+                    label.classList.remove('selected-answer'); // Clear previous selection styling
+
+                    if (optIndex === q.correctAnswer) {
+                        label.classList.add('correct-answer'); // Mark correct answer
+                    }
+                    if (optIndex === studentAnswerIndex && optIndex !== q.correctAnswer) {
+                        label.classList.add('wrong-answer'); // Mark wrong selected answer
+                    }
+                    if (optIndex === studentAnswerIndex) {
+                         label.classList.add('selected-answer'); // Mark selected answer
+                    }
+                    radio.disabled = true; // Disable all radio buttons after submission
+                });
+            });
+
+            const totalQuestions = currentActiveQuiz.questions.length;
+            const resultDiv = document.getElementById('quiz-submission-result');
+            resultDiv.style.display = 'block';
+            let resultMessage = '';
+            let resultClass = '';
+
+            if (timeUp) {
+                resultMessage = `انتهى الوقت! حصلت على ${correctAnswers} من ${totalQuestions} إجابات صحيحة.`;
+                resultClass = correctAnswers >= (totalQuestions / 2) ? 'success' : 'fail';
+            } else {
+                resultMessage = `تم تسليم الاختبار! حصلت على ${correctAnswers} من ${totalQuestions} إجابات صحيحة.`;
+                resultClass = correctAnswers >= (totalQuestions / 2) ? 'success' : 'fail';
+            }
+            resultDiv.textContent = resultMessage;
+            resultDiv.className = `quiz-result ${resultClass}`;
+
+            // Save result
+            if (!studentQuizResults[studentId]) {
+                studentQuizResults[studentId] = {};
+            }
+            studentQuizResults[studentId][currentActiveQuiz.id] = {
+                quizTitle: currentActiveQuiz.title,
+                score: correctAnswers,
+                totalQuestions: totalQuestions,
+                attemptedAt: new Date().toLocaleString('ar-EG', { dateStyle: 'medium', timeStyle: 'short' }),
+                studentAnswers: studentAnswers // Store student's answers for review
+            };
+            saveData();
+            updateStudentProgress(studentId); // Update progress view
+
+            // Optionally, disable the submit button after submission
+            quizForm.querySelector('button[type="submit"]').disabled = true;
+
+            // Give option to go back to quiz list
+            const backToQuizzesBtn = document.createElement('button');
+            backToQuizzesBtn.classList.add('btn', 'primary-btn');
+            backToQuizzesBtn.textContent = 'العودة للاختبارات';
+            backToQuizzesBtn.style.marginTop = '20px';
+            backToQuizzesBtn.onclick = () => {
+                currentActiveQuiz = null;
+                document.getElementById('active-quiz-container').style.display = 'none';
+                document.getElementById('student-quizzes-list').style.display = 'block';
+                document.getElementById('current-quiz-form').querySelector('button[type="submit"]').disabled = false; // Re-enable for next quiz
+                renderStudentQuizzes(currentUser.data.grade, currentUser.data.gradeType); // Re-render to show updated status
+            };
+            resultDiv.appendChild(backToQuizzesBtn);
+        }
+
+        function viewStudentQuizResult(quizId) {
+            const studentId = currentUser.data.id;
+            const quizAttempt = studentQuizResults[studentId] && studentQuizResults[studentId][quizId];
+            const quiz = quizzes.find(q => q.id === quizId);
+
+            if (!quizAttempt || !quiz) {
+                alert('لا توجد نتيجة لهذا الاختبار أو الاختبار غير موجود.');
+                return;
+            }
+
+            // Temporarily switch to active quiz display to show results
+            document.getElementById('student-quizzes-list').style.display = 'none';
+            document.getElementById('active-quiz-container').style.display = 'block';
+            document.getElementById('active-quiz-title').textContent = `${quiz.title} - نتيجتك`;
+            document.getElementById('quiz-timer').textContent = ''; // Clear timer display
+            clearInterval(quizTimerInterval); // Ensure timer is stopped
+
+            const quizQuestionsDisplay = document.getElementById('quiz-questions-display');
+            quizQuestionsDisplay.innerHTML = '';
+
+            quiz.questions.forEach((q, qIndex) => {
+                const questionBlock = document.createElement('div');
+                questionBlock.classList.add('question-block');
+                questionBlock.innerHTML = `<h4>سؤال ${qIndex + 1}: ${q.question}</h4>`;
+                
+                const studentAnswerIndex = quizAttempt.studentAnswers[qIndex];
+
+                q.options.forEach((option, optIndex) => {
+                    const label = document.createElement('label');
+                    label.textContent = `${String.fromCharCode(65 + optIndex)}. ${option}`;
+                    
+                    if (optIndex === q.correctAnswer) {
+                        label.classList.add('correct-answer');
+                        label.textContent += ' (الإجابة الصحيحة)';
+                    }
+                    if (optIndex === studentAnswerIndex && optIndex !== q.correctAnswer) {
+                        label.classList.add('wrong-answer');
+                        label.textContent += ' (إجابتك)';
+                    } else if (optIndex === studentAnswerIndex && optIndex === q.correctAnswer) {
+                        label.classList.add('selected-answer'); // Highlight correctly selected answer
+                        label.textContent += ' (إجابتك الصحيحة)';
+                    }
+                    questionBlock.appendChild(label);
+                });
+                quizQuestionsDisplay.appendChild(questionBlock);
+            });
+
+            document.getElementById('current-quiz-form').querySelector('button[type="submit"]').style.display = 'none'; // Hide submit button
+            
+            const resultDiv = document.getElementById('quiz-submission-result');
+            resultDiv.style.display = 'block';
+            const resultClass = quizAttempt.score >= (quizAttempt.totalQuestions / 2) ? 'success' : 'fail';
+            resultDiv.textContent = `نتيجتك: ${quizAttempt.score} من ${quizAttempt.totalQuestions} إجابات صحيحة (في: ${quizAttempt.attemptedAt})`;
+            resultDiv.className = `quiz-result ${resultClass}`;
+
+            const backToQuizzesBtn = document.createElement('button');
+            backToQuizzesBtn.classList.add('btn', 'primary-btn');
+            backToQuizzesBtn.textContent = 'العودة للاختبارات';
+            backToQuizzesBtn.style.marginTop = '20px';
+            backToQuizzesBtn.onclick = () => {
+                currentActiveQuiz = null;
+                document.getElementById('active-quiz-container').style.display = 'none';
+                document.getElementById('student-quizzes-list').style.display = 'block';
+                document.getElementById('current-quiz-form').querySelector('button[type="submit"]').style.display = 'block'; // Show submit button for next quiz
+                renderStudentQuizzes(currentUser.data.grade, currentUser.data.gradeType);
+            };
+            resultDiv.appendChild(backToQuizzesBtn);
+        }
+
         // Initial setup on page load
         document.addEventListener('DOMContentLoaded', () => {
+            // Add initial question to quiz creation form
+            if (document.getElementById('create-quiz')) {
+                addQuestion();
+            }
             // Check if user was already logged in
             if (currentUser) {
                 if (currentUser.type === 'teacher') {
@@ -3027,203 +3724,25 @@
             }
         });
 
-
-
-
-
-// تهيئة Firebase
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  appId: "YOUR_APP_ID"
-};
-firebase.initializeApp(firebaseConfig);
-
-// تعديل دالة رفع الفيديو
-document.getElementById('upload-video-form').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  
-  const videoFile = document.getElementById('video-file').files[0];
-  const storageRef = firebase.storage().ref(`videos/${videoFile.name}`);
-  const uploadTask = storageRef.put(videoFile);
-
-  uploadTask.on('state_changed', 
-    (snapshot) => {
-      // عرض تقدم الرفع
-      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      console.log(`Upload is ${progress}% done`);
-    },
-    (error) => {
-      showMessage('upload-video-message', 'فشل في رفع الفيديو: ' + error.message, false);
-    },
-    () => {
-      uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-        const newVideo = {
-          id: Date.now().toString(),
-          title: document.getElementById('video-title').value,
-          videoUrl: downloadURL, // الرابط الدائم من Firebase
-          // ... باقي البيانات
-        };
-        videos.push(newVideo);
-        saveData();
-        showMessage('upload-video-message', 'تم رفع الفيديو بنجاح!', true);
-      });
-    }
-  );
-});
-
-
-
-
-function applyVideoSecuritySettings() {
-    const level = platformSettings.securityLevel;
-    videoPlayer.controlsList = 'nodownload'; // Always disable download
-
-    if (level === 'متوسط') {
-        // Disable fullscreen button (browser-specific and not fully reliable via controlsList)
-        videoPlayer.controlsList += ' nofullscreen';
-        // Attempt to prevent right-click
-        videoPlayer.oncontextmenu = () => false;
-    } else if (level === 'عالي') {
-        // Disable everything possible
-        videoPlayer.controlsList += ' nofullscreen noplaybackrate';
-        videoPlayer.oncontextmenu = () => false;
-        videoPlayer.disablePictureInPicture = true;
-        // Add a listener to try to prevent common screenshot shortcuts (limited effectiveness)
-        document.addEventListener('keydown', handleScreenshotKeys);
-    } else { // 'عادي'
-        videoPlayer.controlsList = 'nodownload'; // Only disable download
-        videoPlayer.oncontextmenu = null; // Re-enable right-click
-        videoPlayer.disablePictureInPicture = false;
-        document.removeEventListener('keydown', handleScreenshotKeys);
-    }
-}
-
-function handleScreenshotKeys(event) {
-    // Attempt to block common screenshot keys, note this is not foolproof
-    const forbiddenKeys = ['PrintScreen', 'Meta', 'Alt']; // Windows PrintScreen, Mac Command, Alt
-    if (forbiddenKeys.includes(event.key) || (event.ctrlKey && event.shiftKey && event.key === 's') || (event.ctrlKey && event.key === 'p')) {
-        event.preventDefault();
-        alert("تم تعطيل لقطات الشاشة لحماية المحتوى.");
-    }
-}
-
-
-
-
-// Find your existing upload-video-form event listener
-document.getElementById('upload-video-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    clearFormMessages(); // Clear existing messages
-    
-    const title = document.getElementById('video-title').value.trim();
-    const description = document.getElementById('video-description').value.trim();
-    const thumbnailFile = document.getElementById('video-thumbnail').files[0];
-    const videoFile = document.getElementById('video-file').files[0];
-    const targetGradeType = document.getElementById('video-target-grade-type').value;
-    const targetGrade = document.getElementById('video-target-grade').value;
-    const messageElementId = 'upload-video-message';
-    const uploadSpinner = document.getElementById('upload-spinner');
-
-    if (!title || !videoFile || !targetGradeType || !targetGrade) {
-        showMessage(messageElementId, 'الرجاء إدخال عنوان الفيديو وملف الفيديو والصف المستهدف.', false);
-        return;
-    }
-
-    // Basic file size validation (Firebase Storage has its own limits, but good for UX)
-    const MAX_VIDEO_FILE_SIZE = 500 * 1024 * 1024; // Example: 500 MB limit, Firebase allows up to 5TB per object
-    if (videoFile.size > MAX_VIDEO_FILE_SIZE) {
-        showMessage(messageElementId, `حجم ملف الفيديو كبير جداً. الحد الأقصى ${MAX_VIDEO_FILE_SIZE / (1024 * 1024)} ميجابايت.`, false);
-        return;
-    }
-
-    uploadSpinner.style.display = 'block';
-    showMessage(messageElementId, 'جاري رفع الفيديو، قد يستغرق الأمر بعض الوقت...', true);
-
-    try {
-        // 1. Upload Video File to Firebase Storage
-        const videoStorageRef = firebase.storage().ref(`videos/${Date.now()}_${videoFile.name}`); // Unique name
-        const videoUploadTask = videoStorageRef.put(videoFile);
-
-        // Monitor upload progress (optional but good for UX)
-        videoUploadTask.on('state_changed', 
-            (snapshot) => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                showMessage(messageElementId, `جاري رفع الفيديو: ${progress.toFixed(0)}%`, true);
-            },
-            (error) => {
-                throw new Error('فشل في رفع الفيديو: ' + error.message);
+        // منع استخدام مفتاح F12 لفتح أدوات المطور (لا يمنع بشكل كامل)
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.shiftKey && e.key === 'J') || (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+                alert('هذه الميزة معطلة لأسباب أمنية.');
             }
-        );
+        });
 
-        await videoUploadTask; // Wait for video upload to complete
-        const videoUrl = await videoStorageRef.getDownloadURL();
+        // منع نسخ المحتوى (لا يمنع بشكل كامل)
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            alert('نسخ المحتوى غير مسموح به.');
+        });
 
-        // 2. Upload Thumbnail File if exists
-        let thumbnailUrl = 'https://via.placeholder.com/320x200/ADD8E6/FFFFFF?text=Video+Thumbnail';
-        if (thumbnailFile) {
-            const thumbnailStorageRef = firebase.storage().ref(`thumbnails/${Date.now()}_${thumbnailFile.name}`); // Unique name
-            const thumbnailUploadTask = thumbnailStorageRef.put(thumbnailFile);
-            await thumbnailUploadTask; // Wait for thumbnail upload
-            thumbnailUrl = await thumbnailStorageRef.getDownloadURL();
-        }
+        // منع تحديد النص (لمنع النسخ بطرق أخرى)
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
 
-        // 3. Store video metadata with permanent URLs
-        const newVideo = {
-            id: Date.now().toString(),
-            title: title,
-            description: description,
-            thumbnail: thumbnailUrl,
-            videoUrl: videoUrl, // THIS IS THE PERMANENT URL
-            targetGradeType: targetGradeType,
-            targetGrade: targetGrade,
-            uploadDate: new Date().toLocaleDateString('ar-EG'),
-            views: 0
-        };
-
-        videos.push(newVideo);
-        saveData(); // Save to localStorage (or ideally, to a Firebase database like Firestore)
-        uploadSpinner.style.display = 'none';
-        showMessage(messageElementId, 'تم رفع الفيديو بنجاح!', true);
-        document.getElementById('upload-video-form').reset();
-        renderTeacherVideos();
-        updateTeacherDashboard();
-
-    } catch (error) {
-        uploadSpinner.style.display = 'none';
-        showMessage(messageElementId, error.message, false);
-        console.error("Upload error:", error);
-    }
-});
-
-
-
-function saveVideo(id) {
-  let saved = JSON.parse(localStorage.getItem("watchedVideos") || "[]");
-  if (!saved.includes(id)) {
-    saved.push(id);
-    localStorage.setItem("watchedVideos", JSON.stringify(saved));
-  }
-  displayVideo(id);
-}
-
-function displayVideo(id) {
-  const card = document.querySelector(`[data-id="${id}"]`);
-  const videoHTML = `
-    <video controls width="100%">
-      <source src="${id}.mp4" type="video/mp4">
-      متصفحك لا يدعم تشغيل الفيديو.
-    </video>
-  `;
-  card.innerHTML += videoHTML;
-}
-
-window.onload = function () {
-  let saved = JSON.parse(localStorage.getItem("watchedVideos") || "[]");
-  saved.forEach(id => displayVideo(id));
-};
 
     </script>
 </body>
