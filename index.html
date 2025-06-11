@@ -4012,6 +4012,69 @@ function convertToEmbedURL(url) {
 }
 
    
+
+
+   // تعديل وظيفة deleteVideo
+function deleteVideo(videoId) {
+  if (confirm('هل أنت متأكد من حذف هذا الفيديو؟')) {
+    videos = videos.filter(v => v.id !== videoId);
+    saveData();
+    
+    // تحديث الواجهة للمعلم
+    renderTeacherVideos();
+    
+    // إذا كان الطالب متصلاً، تحديث واجهته
+    if (currentUser?.type === 'student') {
+      renderStudentVideos(currentUser.data.grade, currentUser.data.gradeType);
+    }
+  }
+}
+
+// تعديل وظيفة حفظ الفيديو الجديد
+document.getElementById('upload-video-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  // ... الكود الحالي ...
+  
+  // بعد حفظ الفيديو
+  saveData();
+  renderTeacherVideos();
+  
+  // إذا كان الطالب متصلاً، تحديث واجهته
+  if (currentUser?.type === 'student' && 
+      newVideo.targetGrade === currentUser.data.grade && 
+      newVideo.targetGradeType === currentUser.data.gradeType) {
+    renderStudentVideos(currentUser.data.grade, currentUser.data.gradeType);
+  }
+});
+
+
+// أضف هذه الدالة في نهاية ملف script.js
+function startPolling() {
+  setInterval(() => {
+    if (currentUser) {
+      // إعادة تحميل البيانات من localStorage
+      const updatedVideos = JSON.parse(localStorage.getItem('videos')) || [];
+      const updatedQuizzes = JSON.parse(localStorage.getItem('quizzes')) || [];
+      
+      // إذا كان هناك تغيير في الفيديوهات
+      if (JSON.stringify(videos) !== JSON.stringify(updatedVideos)) {
+        videos = updatedVideos;
+        if (currentUser.type === 'teacher') renderTeacherVideos();
+        if (currentUser.type === 'student') renderStudentVideos(currentUser.data.grade, currentUser.data.gradeType);
+      }
+      
+      // إذا كان هناك تغيير في الاختبارات
+      if (JSON.stringify(quizzes) !== JSON.stringify(updatedQuizzes)) {
+        quizzes = updatedQuizzes;
+        if (currentUser.type === 'teacher') renderManageQuizzes();
+        if (currentUser.type === 'student') renderStudentQuizzes(currentUser.data.grade, currentUser.data.gradeType);
+      }
+    }
+  }, 5000); // التحقق كل 5 ثوانٍ
+}
+
+// استدعاء الدالة عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', startPolling);
 </script>
 </body>
 </html>
