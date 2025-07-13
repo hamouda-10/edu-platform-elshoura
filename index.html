@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -35,15 +36,6 @@
             --facebook-color: #1877F2;
             --instagram-color: #E4405F;
             --linkedin-color: #0A66C2;
-
-
-
-             --gold: #FFD700;
-            --gold-light: rgba(255, 215, 0, 0.7);
-            --dark-blue: #001F3F;
-            --red: #d9534f;
-            --white: #ffffff;
-            --black: #ffffff;
         }
 
         * {
@@ -1874,312 +1866,29 @@
         }
 
         .social1-links a:hover {
-            transform: translateY(-3px); /* Lift effect on hover */
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
-            background-color: #f0f0f0; /* Slightly darker white on hover */
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
+            background-color: #f0f0f0;
         }
 
         .social1-links a i {
-            color: #333; /* Ensure icon color is consistent */
+            color: #333; 
         }
 
-        /* Optional: Specific hover colors for each platform */
+       
         .social1-links a[href*="facebook"]:hover {
-            color: #1877f2; /* Facebook blue */
+            color: #1877f2; 
         }
         .social1-links a[href*="whatsapp"]:hover {
-            color: #25d366; /* WhatsApp green */
+            color: #25d366; 
         }
         .social1-links a[href*="youtube"]:hover {
-            color: #ff0000; /* YouTube red */
+            color: #ff0000;
         }
-
-
-
-     
-
-        /* أنماط النافذة الفخمة */
-        .maintenance-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-           
-            backdrop-filter: blur(3px);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
-            overflow: hidden;
-        }
-        
-        .maintenance-popup {
-            background: linear-gradient(135deg, rgb(62, 223, 50) 0%, rgba(0, 0, 0, 0.98) 100%);
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 600px;
-            width: 84%;
-            text-align: center;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-            border: 5px solid var(--gold);
-            position: relative;
-            overflow: hidden;
-            animation: slideIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            transform-style: preserve-3d;
-        }
-        
-
-        
-        .maintenance-content {
-            position: relative;
-            z-index: 1;
-        }
-        
-        .maintenance-popup h2 {
-            color: var(--dark-blue);
-            font-size: 1.8rem;
-            margin-bottom: 27px;
-            font-weight: 900;
-           
-            position: relative;
-            display: inline-block;
-        }
-        
-        .maintenance-popup h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            right: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(to right, var(--gold), var(--red));
-            border-radius: 3px;
-            animation: underlineGrow 0.9s ease-out forwards;
-        }
-        
-        .maintenance-popup p {
-            font-size: 1rem;
-            color: var(--black);
-            margin-bottom: 20px;
-            line-height: 1.8;
-            font-weight: 700;
-        }
-        
-        .whatsapp-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #05ff1a 0%, #000000 100%);
-            color: var(--white);
-            padding: 10px 10px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.9rem;
-            transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
-            position: relative;
-            overflow: hidden;
-            border: none;
-            z-index: 1;
-        }
-        
-       
-      
-        
-        .whatsapp-btn i {
-            margin-left: 12px;
-            font-size: 1rem;
-            transition: transform 0.4s ease;
-        }
-        
-       
-        
-        .maintenance-icon {
-            font-size: 4rem;
-            color: var(--gold);
-            margin-bottom: 20px;
-            animation: bounce 1s infinite ease-in-out;
-        }
-        
-        .floating-particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-        
-        .particle {
-            position: absolute;
-            background: var(--gold);
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: float linear infinite;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateY(-100px) rotateX(45deg); opacity: 0; }
-            to { transform: translateY(0) rotateX(0); opacity: 1; }
-        }
-        
-        @keyframes shine {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        
-        @keyframes underlineGrow {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-        
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-            100% { transform: translateY(0) rotate(360deg); }
-        }
-        
-        /* تأثيرات ضبابية متقدمة */
-        .blur-content {
-            filter: blur(8px);
-            transition: filter 0.8s ease;
-        }
-        
-        /* تأثيرات إضافية للفخامة */
-        .glow-text {
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
-        }
-        
 
     </style>
 </head>
-
-<!-- النافذة العائمة المعدلة -->
-<div class="maintenance-overlay">
-    <div class="maintenance-popup">
-        <h2><i class="fas fa-tools"></i> الموقع خارج الخدمة حالياً</h2>
-        <p>نعتذر عن الإزعاج، الموقع قيد التطوير حاليًا وسيعود قريبًا بإصدار جديد ومميز.</p>
-        <p>للاستفسارات أو التواصل الفوري ، يمكنك الضغط على الزر أدناه </p>
-        <div class="contact-section">
-            <a href="https://wa.me/201201898518" class="whatsapp-btn" target="_blank">
-                <i class="fab fa-whatsapp"></i> تواصل معي عبر واتساب
-            </a>
-            
-            <div class="developer-card">
-                <div class="signature-icon">
-                    <i class="fas fa-code"></i>
-                </div>
-                <div class="signature-text">
-                    <p class="name">م/ عبدالرحمن حمودة</p>
-                    <p class="title">مطور واجهات المستخدم</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<style>
-    .contact-section {
-        margin-top: 20px;
-        text-align: center;
-    }
-    
-    .developer-card {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(5px);
-        border: 2px solid rgb(255, 217, 0);
-        border-radius: 12px;
-        padding: 12px;
-        margin-top: 15px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 12px;
-        max-width: 280px;
-        margin-left: auto;
-        margin-right: auto;
-        transition: all 0.3s ease;
-    }
-    
-    .developer-card:hover {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: rgba(255, 215, 0, 0.5);
-        transform: translateY(-2px);
-    }
-    
-    .signature-icon {
-        color: var(--gold);
-        font-size: 1.5rem;
-        width: 36px;
-        height: 36px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(255, 217, 0, 0.173);
-        border-radius: 50%;
-    }
-    
-    .signature-text {
-        text-align: right;
-    }
-    
-    .developer-card .name {
-        color: #fff;
-        font-weight: 600;
-        font-size: 1rem;
-        margin: 0;
-        line-height: 1.3;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    }
-    
-    .developer-card .title {
-        color: rgba(255, 255, 255, 0.8);
-        font-size: 0.8rem;
-        margin: 0;
-        line-height: 1.3;
-        font-weight: 400;
-    }
-    
-    @media (max-width: 480px) {
-        .developer-card {
-            padding: 10px;
-            gap: 10px;
-            max-width: 240px;
-        }
-        
-        .signature-icon {
-            font-size: 1.3rem;
-            width: 32px;
-            height: 32px;
-        }
-        
-        .developer-card .name {
-            font-size: 0.9rem;
-        }
-        
-        .developer-card .title {
-            font-size: 0.75rem;
-        }
-    }
-</style>
-    
 <body oncontextmenu="return false;"> <div class="background-animation">
-
-     
         <div class="circle circle-1"></div>
         <div class="circle circle-2"></div>
         <div class="circle circle-3"></div>
@@ -2190,7 +1899,7 @@
     <div class="container active" id="landing-page">
         <header class="header">
             <div class="logo">
-                <img src="https://scontent.faly8-1.fna.fbcdn.net/v/t39.30808-6/464431595_8392400884141290_7494451406885624706_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=vDFixEWo35sQ7kNvwHa1RnJ&_nc_oc=Adm8FFSSh4XHhRXXCaU7PF4ZG6-AJS0tqlESvIoJqmetGYQb3kvqMN1DxO5KdFD-cck&_nc_zt=23&_nc_ht=scontent.faly8-1.fna&_nc_gid=mKnvMozQIxItIlYQQNwAbA&oh=00_AfOTQhNKZ7WKYq99_ofWQL-mqsUQWhzcaAqWBjHtc3DsUQ&oe=684E016F" alt="شعار مستر أحمد الشورى">
+                <img src="https://i.postimg.cc/8PQMxh8Y/464431595-8392400884141290-7494451406885624706-n.jpg" alt="شعار مستر أحمد الشورى">
                 <h1>منصة مستر أحمد الشورى</h1>
             </div>
             
@@ -2205,7 +1914,7 @@
                 </div>
             </div>
             <div class="hero-image">
-                <img src="https://scontent.faly8-2.fna.fbcdn.net/v/t39.30808-6/470229934_446515841835041_2413616035024142761_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=JM04iN_G6SQQ7kNvwF9lBAf&_nc_oc=AdmC668FZi9_VT4A3tuwXM1Xpll7K_bhwglMyO9_6TKwGw0WdWr2nMerQF-DbhLvDRg&_nc_zt=23&_nc_ht=scontent.faly8-2.fna&_nc_gid=jFHVAYtRQsRTpq-xPwzD5w&oh=00_AfOpUOIkhWxeczRGTXr1h-HTEHBygIdV9s5fDengQBxLiQ&oe=684DEA41" alt="صورة تعليم اللغة العربية">
+                <img src="https://i.postimg.cc/4xXtxsxb/470229934-446515841835041-2413616035024142761-n.jpg" alt="صورة تعليم اللغة العربية">
             </div>
         </section>
         
@@ -2214,7 +1923,7 @@
     <div class="container" id="about-platform-screen">
         <header class="header">
             <div class="logo">
-                <img src="https://scontent.faly8-1.fna.fbcdn.net/v/t39.30808-6/464431595_8392400884141290_7494451406885624706_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=vDFixEWo35sQ7kNvwHa1RnJ&_nc_oc=Adm8FFSSh4XHhRXXCaU7PF4ZG6-AJS0tqlESvIoJqmetGYQb3kvqMN1DxO5KdFD-cck&_nc_zt=23&_nc_ht=scontent.faly8-1.fna&_nc_gid=mKnvMozQIxItIlYQQNwAbA&oh=00_AfOTQhNKZ7WKYq99_ofWQL-mqsUQWhzcaAqWBjHtc3DsUQ&oe=684E016F" alt="شعار مستر أحمد الشورى">
+                <img src="https://i.postimg.cc/8PQMxh8Y/464431595-8392400884141290-7494451406885624706-n.jpg" alt="شعار مستر أحمد الشورى">
                 <h1>منصة مستر أحمد الشورى</h1>
             </div>
             <nav class="main-nav">
@@ -2225,7 +1934,7 @@
             <h2>اكتشف منصة مستر أحمد الشورى</h2>
             <div class="about-content">
                 <div class="about-teacher-info">
-                    <img src="https://scontent.faly8-1.fna.fbcdn.net/v/t39.30808-6/470241470_446516861834939_4004555550868124438_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=Id6ihm1igLgQ7kNvwG7ojxG&_nc_oc=Adlxn9zxTKuczKxat4Z-PqqAK1wbHdplIi4zB7OG0FxKChlTLw6paM1CCdQeM4pYTe0&_nc_zt=23&_nc_ht=scontent.faly8-1.fna&_nc_gid=n1cchjETyQro7E4beZercg&oh=00_AfMqJpF9vN7S5fp-nr9JXv92gt9ALM5dg1f09jblFDZFmg&oe=684DD7AC" alt="صورة المستر">
+                    <img src="https://i.postimg.cc/8PQMxh8Y/464431595-8392400884141290-7494451406885624706-n.jpg" alt="صورة المستر">
                     <h3>مستر أحمد الشورى</h3>
                     <p>مستر أحمد الشورى هو مدرس متخصص في اللغة العربية، يقدم شرحًا مبسطًا ومفصلًا لجميع فروع المادة لضمان فهم عميق وتحقيق أعلى الدرجات.</p>
                     <div class="social-links">
@@ -2250,7 +1959,7 @@
             <div class="profile-halo"></div>
             
             <div class="profile-image">
-                <img src="https://scontent.faly8-2.fna.fbcdn.net/v/t39.30808-6/476378289_1168305034818049_8033882813266140408_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=P2oCppDUDh8Q7kNvwHO7jSq&_nc_oc=Adk-4dwDqE_srcFbeZqXwFlqhB5YVk2yQXlc6U6DrApx2WTga-eWUyxNlWcFUs5_JCE&_nc_zt=23&_nc_ht=scontent.faly8-2.fna&_nc_gid=gtaP94no4-YVrkjb32AOKw&oh=00_AfP2Bxtzj3U8x8TYoY5PUqxWS08mCcEFC7u2wqUQaog7Cg&oe=684E04D4" alt="الصورة الشخصية">
+                <img src="https://i.postimg.cc/85ff0CZD/60.jpg" alt="الصورة الشخصية">
             </div>
             
             <div class="design-card">
@@ -2323,7 +2032,7 @@
     <div class="container" id="auth-screen">
         <header class="header">
             <div class="logo">
-                <img src="https://scontent.faly8-1.fna.fbcdn.net/v/t39.30808-6/464431595_8392400884141290_7494451406885624706_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=vDFixEWo35sQ7kNvwHa1RnJ&_nc_oc=Adm8FFSSh4XHhRXXCaU7PF4ZG6-AJS0tqlESvIoJqmetGYQb3kvqMN1DxO5KdFD-cck&_nc_zt=23&_nc_ht=scontent.faly8-1.fna&_nc_gid=mKnvMozQIxItIlYQQNwAbA&oh=00_AfOTQhNKZ7WKYq99_ofWQL-mqsUQWhzcaAqWBjHtc3DsUQ&oe=684E016F" alt="شعار مستر أحمد الشورى">
+                <img src="https://i.postimg.cc/8PQMxh8Y/464431595-8392400884141290-7494451406885624706-n.jpg" alt="شعار مستر أحمد الشورى">
                 <h1>منصة مستر أحمد الشورى</h1>
             </div>
             <nav class="main-nav">
@@ -2388,7 +2097,7 @@
     <div class="container" id="teacher-dashboard">
         <header class="header">
             <div class="logo">
-                <img src="https://scontent.faly8-1.fna.fbcdn.net/v/t39.30808-6/464431595_8392400884141290_7494451406885624706_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=vDFixEWo35sQ7kNvwHa1RnJ&_nc_oc=Adm8FFSSh4XHhRXXCaU7PF4ZG6-AJS0tqlESvIoJqmetGYQb3kvqMN1DxO5KdFD-cck&_nc_zt=23&_nc_ht=scontent.faly8-1.fna&_nc_gid=mKnvMozQIxItIlYQQNwAbA&oh=00_AfOTQhNKZ7WKYq99_ofWQL-mqsUQWhzcaAqWBjHtc3DsUQ&oe=684E016F" alt="شعار مستر أحمد الشورى">
+                <img src="https://i.postimg.cc/8PQMxh8Y/464431595-8392400884141290-7494451406885624706-n.jpg" alt="شعار مستر أحمد الشورى">
                 <h1>لوحة تحكم مستر أحمد الشورى</h1>
             </div>
             <nav class="main-nav">
@@ -2398,7 +2107,7 @@
         <section class="dashboard-content">
             <aside class="sidebar">
                 <div class="profile-info">
-                    <img src="https://scontent.faly8-1.fna.fbcdn.net/v/t39.30808-6/470241470_446516861834939_4004555550868124438_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=Id6ihm1igLgQ7kNvwG7ojxG&_nc_oc=Adlxn9zxTKuczKxat4Z-PqqAK1wbHdplIi4zB7OG0FxKChlTLw6paM1CCdQeM4pYTe0&_nc_zt=23&_nc_ht=scontent.faly8-1.fna&_nc_gid=n1cchjETyQro7E4beZercg&oh=00_AfMqJpF9vN7S5fp-nr9JXv92gt9ALM5dg1f09jblFDZFmg&oe=684DD7AC" alt="صورة المستر" class="profile-avatar">
+                    <img src="https://i.postimg.cc/jdHPTLtS/474242211-470365389450086-2233369384458044050-n.jpg" alt="صورة المستر" class="profile-avatar">
                     <h3>مستر أحمد الشورى</h3>
                     <p>مدرس لغة عربية</p>
                     <div class="social1-links">
@@ -2622,7 +2331,7 @@
     <div class="container" id="student-dashboard">
         <header class="header">
             <div class="logo">
-                <img src="https://scontent.faly8-1.fna.fbcdn.net/v/t39.30808-6/470241470_446516861834939_4004555550868124438_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=Id6ihm1igLgQ7kNvwG7ojxG&_nc_oc=Adlxn9zxTKuczKxat4Z-PqqAK1wbHdplIi4zB7OG0FxKChlTLw6paM1CCdQeM4pYTe0&_nc_zt=23&_nc_ht=scontent.faly8-1.fna&_nc_gid=n1cchjETyQro7E4beZercg&oh=00_AfMqJpF9vN7S5fp-nr9JXv92gt9ALM5dg1f09jblFDZFmg&oe=684DD7AC" alt="شعار مستر أحمد الشورى">
+                <img src="https://i.postimg.cc/jdHPTLtS/474242211-470365389450086-2233369384458044050-n.jpg" alt="شعار مستر أحمد الشورى">
                 <h1>مرحباً بك يا <span id="student-dashboard-name">طالب!</span></h1>
             </div>
             <nav class="main-nav">
@@ -2745,20 +2454,17 @@
     </div>
 
     <script>
-    // --- Global State Management (Simulated Backend Data) ---
-    // In a real application, this data would come from a secure backend server and database.
-    // This is for demonstration of the front-end functionality and user experience.
+  
+    const TEACHER_PASSWORD = "55555"; // باسورد مؤقت
+    let currentUser = JSON.parse(sessionStorage.getItem('currentUser')) || null;
 
-    const TEACHER_PASSWORD = "55555"; // In a real app, this would be hashed and stored securely.
-    let currentUser = JSON.parse(sessionStorage.getItem('currentUser')) || null; // Stores { type: 'student'/'teacher', data: { ... } }
 
-    // Load data from localStorage or initialize empty arrays/objects
     let students = JSON.parse(localStorage.getItem('students')) || [];
     let videos = JSON.parse(localStorage.getItem('videos')) || [];
     let studentLoginLog = JSON.parse(localStorage.getItem('studentLoginLog')) || [];
-    let studentWatchHistory = JSON.parse(localStorage.getItem('studentWatchHistory')) || {}; // { studentId: [{ videoId, title, watchedAt }] }
-    let quizzes = JSON.parse(localStorage.getItem('quizzes')) || []; // New: Stores quizzes created by teacher
-    let studentQuizResults = JSON.parse(localStorage.getItem('studentQuizResults')) || {}; // New: Stores student quiz attempts
+    let studentWatchHistory = JSON.parse(localStorage.getItem('studentWatchHistory')) || {};
+    let quizzes = JSON.parse(localStorage.getItem('quizzes')) || []; 
+    let studentQuizResults = JSON.parse(localStorage.getItem('studentQuizResults')) || {};
     let platformSettings = JSON.parse(localStorage.getItem('platformSettings')) || {
         welcomeMessage: "أهلاً بكم في منصة مستر أحمد الشورى التعليمية!",
         contactEmail: "support@yourdomain.com",
@@ -2767,19 +2473,18 @@
     };
 
 
-    // Save data to localStorage (simulated persistence)
+ 
     function saveData() {
         localStorage.setItem('students', JSON.stringify(students));
         localStorage.setItem('videos', JSON.stringify(videos));
         localStorage.setItem('studentLoginLog', JSON.stringify(studentLoginLog));
         localStorage.setItem('studentWatchHistory', JSON.stringify(studentWatchHistory));
-        localStorage.setItem('quizzes', JSON.stringify(quizzes)); // Save quizzes
-        localStorage.setItem('studentQuizResults', JSON.stringify(studentQuizResults)); // Save quiz results
+        localStorage.setItem('quizzes', JSON.stringify(quizzes));
+        localStorage.setItem('studentQuizResults', JSON.stringify(studentQuizResults));
         localStorage.setItem('platformSettings', JSON.stringify(platformSettings));
-        sessionStorage.setItem('currentUser', JSON.stringify(currentUser)); // Persist current user session
+        sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
     }
 
-    // --- UI Helper Functions ---
     function showMessage(elementId, message, isSuccess = false) {
         const messageElement = document.getElementById(elementId);
         messageElement.textContent = message;
@@ -4029,8 +3734,6 @@
     document.addEventListener('selectstart', function(e) {
         e.preventDefault();
     });
-
-
 
 </script>
 
